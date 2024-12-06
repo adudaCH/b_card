@@ -1,26 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { createContext } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import About from "./components/About";
+import PageNotFound from "./components/PageNotFound";
+import FavCards from "./components/FavCards";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div className="App">
+            <Router>
+                <Navbar />
+                <Routes>
+                    <Route path="/" element={<About />} />
+                    <Route path="/fav-cards" element={<FavCards />} />
+                    {/* <Route path="*" element={<PageNotFound />} /> */}
+                </Routes>
+            </Router>
+            <About />
+        </div>
+    );
 }
 
 export default App;
