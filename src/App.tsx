@@ -6,7 +6,7 @@ import Navbar from "./components/Navbar";
 import About from "./components/About";
 import PageNotFound from "./components/PageNotFound";
 import FavCards from "./components/FavCards";
-import Profile from "./components/Profile";
+// import Profile from "./components/Profile";
 
 function App() {
     return (
@@ -16,7 +16,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<About />} />
                     <Route path="/fav-cards" element={<FavCards />} />
-                    <Route path="/profile" element={<Profile />} />
+                    {/* <Route path="/profile" element={<Profile />} /> */}
                     {/* <Route path="*" element={<PageNotFound />} /> */}
                 </Routes>
             </Router>
