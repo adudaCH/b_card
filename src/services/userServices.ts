@@ -1,6 +1,6 @@
 import axios from "axios";
-import {User, UserLogin} from "../interfaces/User";
-const api: string = `${import.meta.env.VITE_API_URL}/users`;
+import {User, UserLogin} from "../interface/User";
+const api: string = `${process.env.REACT_APP_API}/users` as string;
 
 const token = {
 	"x-auth-token":

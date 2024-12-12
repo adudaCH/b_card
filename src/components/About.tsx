@@ -14,16 +14,16 @@ const About: FunctionComponent<AboutProps> = () => {
                 is designed to revolutionize the way you connect with others,
                 both personally and professionally. Gone are the days of
                 carrying stacks of physical cards that can be misplaced or
-                discarded. With our platform, you can create sleek,
-                customizable digital business cards that are always accessible,
-                eco-friendly, and easy to share. Our mission is to empower
-                individuals and businesses to make meaningful connections in the
-                digital age. Whether you're an entrepreneur, freelancer,
-                corporate professional, or small business owner, our app
-                provides you with the tools to stand out. You can showcase your
-                contact information, portfolio, social media links, and even
-                integrate QR codes, all in a beautifully crafted card that's
-                just a click away.
+                discarded. With our platform, you can create sleek, customizable
+                digital business cards that are always accessible, eco-friendly,
+                and easy to share. Our mission is to empower individuals and
+                businesses to make meaningful connections in the digital age.
+                Whether you're an entrepreneur, freelancer, corporate
+                professional, or small business owner, our app provides you with
+                the tools to stand out. You can showcase your contact
+                information, portfolio, social media links, and even integrate
+                QR codes, all in a beautifully crafted card that's just a click
+                away.
             </p>
 
             <ul className="about">
@@ -43,8 +43,9 @@ const About: FunctionComponent<AboutProps> = () => {
                     your information.
                 </li>
                 <li>
-                    <strong>Easy Management:</strong> Update your details anytime
-                    and ensure your contacts always have the latest information.
+                    <strong>Easy Management:</strong> Update your details
+                    anytime and ensure your contacts always have the latest
+                    information.
                 </li>
             </ul>
 

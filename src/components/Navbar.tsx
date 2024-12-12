@@ -3,7 +3,7 @@ import {
     Navbar as BootstrapNavbar, Nav, Form, FormControl, Button} from "react-bootstrap";
 import {FaUserCircle, FaSearch, FaMoon, FaSun, FaArrowAltCircleRight} from "react-icons/fa";
 import { setDefaultImg } from "../services/userImag";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { toggleTheme } from "../services/toggleTheme";
 
 const Navbar: React.FC = () => {
@@ -22,7 +22,7 @@ const Navbar: React.FC = () => {
 
     const loggedOut = (
         <>
-            <Nav.Link href="/profile"></Nav.Link>
+            <NavLink to="/profile"></NavLink>
             <div className="userIcon">
                 <p>{setDefaultImg("Adi", "Saadya")}</p>
             </div>
@@ -45,16 +45,16 @@ const Navbar: React.FC = () => {
             <BootstrapNavbar.Collapse id="navbar-nav">
                 {/* Navigation Links */}
                 <Nav className="me-auto">
-                    <Nav.Link href="#about">About</Nav.Link>
-                    <Nav.Link href="#cards">Cards</Nav.Link>
+                    <NavLink className={"nav-link"} to="/about">About</NavLink>
+                    <NavLink  className={"nav-link"}   to="/cards">Cards</NavLink>
                     {userTools.loggedIn && (
                         <>
-                            <Nav.Link href="#fav-cards">Fav Cards</Nav.Link>
-                            <Nav.Link href="#my-cards">My Cards</Nav.Link>
+                            <NavLink  className={"nav-link"} to="/fav-cards">Fav Cards</NavLink>
+                            <NavLink  className={"nav-link"} to="/my-cards">My Cards</NavLink>
                         </>
                     )}
                     {/* TODO: if admin */}
-                    <Nav.Link href="#sandbox">Sandbox</Nav.Link>
+                    <NavLink  className={"nav-link"} to="/sandbox">Sandbox</NavLink>
                 </Nav>
 
                 {/* Search Bar */}
@@ -72,18 +72,18 @@ const Navbar: React.FC = () => {
 
                 {/* Icons */}
                 <Nav>
-                    <Nav.Link  onClick={handleThemeToggle}>
+                    <Button className="navIcon" onClick={handleThemeToggle}>
                         {isDarkMode ? <FaSun className="navIcon" /> : <FaMoon className="navIcon" />}
-                    </Nav.Link>
-                    <Nav.Link  className="navIcon" href="/profile">
+                    </Button>
+                    <Button  className="navIcon" onClick={() => navigate("/profile")}>
                         {userTools.loggedIn ? loggedOut : <FaUserCircle />}
-                    </Nav.Link>
+                    </Button>
                     {/* TODO: fix the log out button */}
                     {!userTools.loggedIn && (
-                        <Nav.Link  onClick={() => navigate("/login")}>
+                        <Button className="navIcon" onClick={() => navigate("/login")}>
                             <FaArrowAltCircleRight  className="navIcon" />
                             
-                        </Nav.Link>
+                        </Button>
                     )}
                 </Nav>
             </BootstrapNavbar.Collapse>

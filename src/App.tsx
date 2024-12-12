@@ -9,6 +9,7 @@ import FavCards from "./components/FavCards";
 // import Profile from "./components/Profile";
 
 function App() {
+    // TODO:Initial value - bgc for lightMode
     return (
         <div className="App">
             <Router>
