@@ -6,6 +6,7 @@ import FavCards from "./components/FavCards";
 // import Profile from "./components/Profile";
 // import PageNotFound from "./components/PageNotFound";
 import "./App.css";
+import PageNotFound from "./components/PageNotFound";
 
 // Create a Theme Context
 export const ThemeContext = createContext({
@@ -44,7 +45,7 @@ function App() {
                         <Route path="/" element={<About />} />
                         <Route path="/fav-cards" element={<FavCards />} />
                         {/* <Route path="/profile" element={<Profile />} /> */}
-                        {/* <Route path="*" element={<PageNotFound />} /> */}
+                        <Route path="*" element={<PageNotFound />} />
                     </Routes>
                 </Router>
             </div>
