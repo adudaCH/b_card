@@ -32,7 +32,7 @@ const Navbar: React.FC = () => {
 
     return (
         <BootstrapNavbar
-            bg="primary"
+            bg="dark"
             variant="dark"
             expand="lg"
             className="px-3 navi">

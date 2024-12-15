@@ -8,16 +8,16 @@
     font-weight: 400;
     font-style: normal;
 }
-.navIcon{
-font-size: 1.5rem;
-display: flex;
-background-color: transparent;
-border: none;
+.navIcon {
+    font-size: 1.5rem;
+    display: flex;
+    background-color: transparent;
+    border: none;
 }
 /* TODO:fix the hover on the icons */
-.navIcon :hover{
-    display: none;
-}
+.navIcon:hover,.navIcon:focus{
+    Background:transparent;
+    }
 /* about page */
 .about {
     text-align: justify;
