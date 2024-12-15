@@ -14,6 +14,10 @@ display: flex;
 background-color: transparent;
 border: none;
 }
+/* TODO:fix the hover on the icons */
+.navIcon :hover{
+    display: none;
+}
 /* about page */
 .about {
     text-align: justify;

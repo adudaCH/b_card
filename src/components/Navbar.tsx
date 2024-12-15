@@ -5,6 +5,7 @@ import {FaUserCircle, FaSearch, FaMoon, FaSun, FaArrowAltCircleRight} from "reac
 import { setDefaultImg } from "../services/userImag";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toggleTheme } from "../services/toggleTheme";
+import { GrLogin, GrLogout } from "react-icons/gr";
 
 const Navbar: React.FC = () => {
     const navigate = useNavigate();
@@ -78,13 +79,9 @@ const Navbar: React.FC = () => {
                     <Button  className="navIcon" onClick={() => navigate("/profile")}>
                         {userTools.loggedIn ? loggedOut : <FaUserCircle />}
                     </Button>
-                    {/* TODO: fix the log out button */}
-                    {!userTools.loggedIn && (
-                        <Button className="navIcon" onClick={() => navigate("/login")}>
-                            <FaArrowAltCircleRight  className="navIcon" />
-                            
+                    <Button className="navIcon" onClick={() => navigate(userTools.loggedIn ? "/logout" : "/login")}>
+                    {userTools.loggedIn ? <GrLogout className="navIcon" /> : <GrLogin className="navIcon" />}
                         </Button>
-                    )}
                 </Nav>
             </BootstrapNavbar.Collapse>
         </BootstrapNavbar>
