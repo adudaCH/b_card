@@ -131,7 +131,7 @@ const Login: FunctionComponent<LoginProps> = () => {
         </div>
     </div>
 </main>
-
+// TODO: add a loading Animation after the user clicked "login"
             );
 };
 
