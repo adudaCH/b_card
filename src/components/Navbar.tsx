@@ -19,10 +19,12 @@ import {
     FaArrowAltCircleRight,
 } from "react-icons/fa";
 import { setDefaultImg } from "../services/userImag";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { toggleTheme } from "../services/toggleTheme";
 import { GrLogin, GrLogout } from "react-icons/gr";
 import { ThemeContext, themeMode } from "../services/darklightTeme";
+import { useUserContext } from "../contex/UserContext";
+import useToken from "../costome Hooks/useToken";
 
 interface NavbarProps {
     changeMode: Function;
@@ -30,30 +32,45 @@ interface NavbarProps {
 
 const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
     const navigate = useNavigate();
+    const {
+        isAdmin,
+        isLogedIn,
+        setAuth,
+        setIsAdmin,
+        setIsBusiness,
+        setIsLogedIn,
+    } = useUserContext();
     const theme = useContext(ThemeContext);
-    const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+    const { decodedToken } = useToken();
 
-    const userTools = {
-        loggedIn: localStorage.getItem("token") !== null,
+    const handleLogout = () => {
+        localStorage.removeItem("authToken");
+        setIsLogedIn(false);
+        navigate("/logout");
     };
+    // const userTools = {
+    //     loggedIn: localStorage.getItem("token") !== null,
+    // };
     useEffect(() => {
-        const currentTheme = localStorage.theme;
-        if (currentTheme) {
-            setIsDarkMode(true);
+        if (decodedToken) {
+            setAuth(decodedToken);
+            setIsLogedIn(true);
+            setIsAdmin(decodedToken.isAdmin);
+            setIsBusiness(decodedToken.isBusiness);
         } else {
-            setIsDarkMode(false);
-            console.log("error");
+            setIsLogedIn(false);
+            setIsAdmin(false);
         }
-    }, [isDarkMode]);
+    }, [decodedToken, setAuth, setIsLogedIn, setIsAdmin, setIsBusiness]);
 
-    const loggedOut = (
-        <>
-            <NavLink to="/profile"></NavLink>
-            <div className="userIcon">
-                <p>{setDefaultImg("Adi", "Saadya")}</p>
-            </div>
-        </>
-    );
+    const loggedOut = () => {
+        setAuth(null);
+        setIsAdmin(false);
+        setIsBusiness(false);
+        setIsLogedIn(false);
+        localStorage.removeItem("token");
+        navigate("/cards");
+    };
 
     return (
         <BootstrapNavbar
@@ -74,10 +91,11 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                     <NavLink className={"nav-link"} to="/about">
                         About
                     </NavLink>
+                    {/* TODO: if loggedIn */}
                     <NavLink className={"nav-link"} to="/cards">
                         Cards
                     </NavLink>
-                    {userTools.loggedIn && (
+                    {isLogedIn && (
                         <>
                             <NavLink className={"nav-link"} to="/fav-cards">
                                 Fav Cards
@@ -108,26 +126,56 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
 
                 {/* Icons */}
                 <Nav>
-                    {/* TODO: switch the icons */}
-                    <Button style={{color: theme.color}} className="navIcon " onClick={() => changeMode()}>
+                    <Button
+                        style={{ color: theme.color }}
+                        className="navIcon "
+                        onClick={() => changeMode()}>
                         <FaMoon className="navIcon" />
                     </Button>
                     <Button
                         className="navIcon"
                         onClick={() => navigate("/profile")}>
-                        {userTools.loggedIn ? loggedOut : <FaUserCircle />}
+                        {!isLogedIn && <FaUserCircle />}
                     </Button>
                     <Button
                         className="navIcon"
-                        onClick={() =>
-                            navigate(userTools.loggedIn ? "/logout" : "/login")
-                        }>
-                        {userTools.loggedIn ? (
+                        onClick={() => {
+                            if (isLogedIn) {
+                                handleLogout();
+                            } else {
+                                navigate("/login");
+                            }
+                        }}>
+                        {isLogedIn ? (
                             <GrLogout className="navIcon" />
                         ) : (
                             <GrLogin className="navIcon" />
                         )}
                     </Button>
+
+                    {/* <div className="d-flex mt-3 mb-2 justify-content-between align-items-center">
+                        {isLogedIn ? (
+                            <Link
+                                to={"/cards"}
+                                onClick={loggedOut}
+                                className="fw-bold">
+                                <span className="navIcon">
+                                    <GrLogout/>
+                                </span>
+                            </Link>
+                        ) : (
+                            <div 
+                                className="fw-bold">
+                                <Link
+                                    
+                                    to={"/login"}
+                                className="navIcon" >
+                                    <GrLogin/>
+                                </Link>
+                                
+                            </div>
+                        )}
+                    </div> */}
                 </Nav>
             </BootstrapNavbar.Collapse>
         </BootstrapNavbar>

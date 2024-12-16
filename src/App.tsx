@@ -28,20 +28,20 @@ function App() {
     };
 
     return (
-        <ThemeContext.Provider value={theme? themeMode.dark:themeMode.light}>
-            <div className={`App ${theme.mode}`}>
+        <div className="App">
+                <ThemeContext.Provider value={theme? themeMode.dark:themeMode.light}>
                 <Router>
                     <Navbar changeMode ={toggleTheme} />
                     <Routes>
                         <Route path="/about" element={<About />} />
-                        {/* <Route path="/login" element={<Login />} /> */}
+                        <Route path="/login" element={<Login />} />
                         <Route path="/fav-cards" element={<FavCards />} />
                         {/* <Route path="/profile" element={<Profile />} /> */}
                         <Route path="*" element={<PageNotFound />} />
                     </Routes>
                 </Router>
+                </ThemeContext.Provider>
             </div>
-        </ThemeContext.Provider>
     );
 }
 
