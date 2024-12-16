@@ -1,12 +1,15 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useContext } from "react";
+import { ThemeContext } from "../services/darklightTeme";
 
 interface AboutProps {}
-// TODO: fix the dabble text on the screen
+
 const About: FunctionComponent<AboutProps> = () => {
-    console.log("Rendering About Component"); // Debugging log
+    const theme = useContext(ThemeContext);
+
 
     return (
-        <div className="fluid-container w-75 mt-5">
+        <main style={{ backgroundColor: theme.background, color: theme.color }}>
+        <div className="fluid-container w-75 p-5">
             <h1 className="about">About Us</h1>
 
             <p className="lh-base about">
@@ -58,6 +61,7 @@ const About: FunctionComponent<AboutProps> = () => {
                 the world.
             </p>
         </div>
+        </main>
     );
 };
 

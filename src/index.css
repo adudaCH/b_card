@@ -1,13 +1,3 @@
-/* Use CSS variables for themes */
-body.light-mode {
-    background-color: #121212;
-    color: #ffffff;
-}
-
-body.dark-mode {
-    background-color: #c1f0f3;
-    color: #000000;
-}
 
 @import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
