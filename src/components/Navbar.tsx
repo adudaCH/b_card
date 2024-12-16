@@ -105,10 +105,12 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                             </NavLink>
                         </>
                     )}
-                    {/* TODO: if admin */}
-                    <NavLink className={"nav-link"} to="/sandbox">
-                        Sandbox
-                    </NavLink>
+
+                    {isAdmin && (
+                        <NavLink className={"nav-link"} to="/sandbox">
+                            Sandbox
+                        </NavLink>
+                    )}
                 </Nav>
 
                 {/* Search Bar */}
@@ -152,30 +154,6 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                             <GrLogin className="navIcon" />
                         )}
                     </Button>
-
-                    {/* <div className="d-flex mt-3 mb-2 justify-content-between align-items-center">
-                        {isLogedIn ? (
-                            <Link
-                                to={"/cards"}
-                                onClick={loggedOut}
-                                className="fw-bold">
-                                <span className="navIcon">
-                                    <GrLogout/>
-                                </span>
-                            </Link>
-                        ) : (
-                            <div 
-                                className="fw-bold">
-                                <Link
-                                    
-                                    to={"/login"}
-                                className="navIcon" >
-                                    <GrLogin/>
-                                </Link>
-                                
-                            </div>
-                        )}
-                    </div> */}
                 </Nav>
             </BootstrapNavbar.Collapse>
         </BootstrapNavbar>

@@ -1,4 +1,4 @@
-main{
+main {
     min-height: 100vh;
 }
 
@@ -18,18 +18,12 @@ main{
     background-color: transparent;
     border: none;
 }
-/* TODO:fix the hover on the icons */
-.navIcon:hover,.navIcon:focus{
-    Background:transparent;
-    }
-/* about page */
-.about {
-    text-align: justify;
-    margin-left: 100px;
-    li {
-        margin-bottom: 10px;
-    }
+
+.navIcon:hover,
+.navIcon:focus {
+    background: transparent;
 }
+
 .userIcon {
     width: 20px;
     height: 20px;
@@ -46,12 +40,27 @@ main{
     font-weight: bold;
     font-size: 1.4rem;
 }
-
+/* about page */
+.about {
+    text-align: justify;
+    margin-left: 100px;
+    li {
+        margin-bottom: 10px;
+    }
+}
+/* page not found component */
 .lilita-one-regular {
     font-family: "Lilita One", sans-serif;
     font-weight: 400;
     font-style: normal;
     font-size: 20pt;
 }
-
-
+/* log in component */
+.btn-dark {
+    background-color: #43599a !important;
+}
+.poppins-regular {
+    font-family: "Poppins", serif;
+    font-weight: 500;
+    font-style: normal;
+}
