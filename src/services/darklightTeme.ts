@@ -4,7 +4,7 @@ import { createContext } from "react";
 export const themeMode = {
 
     dark:{background:"black",color:"white"},
-    light:{background:"white",color:"black"}
+    light:{background:"rgb(193, 230, 236)",color:"black"}
 } 
 
 

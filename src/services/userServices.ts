@@ -7,6 +7,8 @@ const token = {
 		"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTBhZTc1OWRiMzgxM2E2NTAyZmMyZmMiLCJpc0J1c2luZXNzIjp0cnVlLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2OTg4NDI5NTJ9.En62ry5Gu9FMBAvxyltv0eRYhpJIJs_aW06QAtxXRck",
 };
 
+
+
 const getUsers = {
 	method: "get",
 	maxBodyLength: Infinity,
@@ -65,3 +67,4 @@ export const deleteUserById = async (userId: string) => {
 		console.log(error);
 	}
 };
+

@@ -20,11 +20,10 @@ import {
 } from "react-icons/fa";
 import { setDefaultImg } from "../services/userImag";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { toggleTheme } from "../services/toggleTheme";
 import { GrLogin, GrLogout } from "react-icons/gr";
 import { ThemeContext, themeMode } from "../services/darklightTeme";
 import { useUserContext } from "../contex/UserContext";
-import useToken from "../costome Hooks/useToken";
+import useToken from "../customeHooks/useToken";
 
 interface NavbarProps {
     changeMode: Function;
@@ -43,11 +42,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
     const theme = useContext(ThemeContext);
     const { decodedToken } = useToken();
 
-    const handleLogout = () => {
-        localStorage.removeItem("authToken");
-        setIsLogedIn(false);
-        navigate("/logout");
-    };
+    
     // const userTools = {
     //     loggedIn: localStorage.getItem("token") !== null,
     // };
@@ -69,7 +64,8 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
         setIsBusiness(false);
         setIsLogedIn(false);
         localStorage.removeItem("token");
-        navigate("/cards");
+        // TODO: chang derction to cards
+        navigate("/about");
     };
 
     return (
@@ -91,7 +87,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                     <NavLink className={"nav-link"} to="/about">
                         About
                     </NavLink>
-                    
+
                     <NavLink className={"nav-link"} to="/cards">
                         Cards
                     </NavLink>
@@ -112,7 +108,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                         </NavLink>
                     )}
                 </Nav>
-
+                    {/* TODO:activate the card search */}
                 {/* Search Bar */}
                 <Form className="d-flex me-3">
                     <FormControl
@@ -144,7 +140,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                         className="navIcon"
                         onClick={() => {
                             if (isLogedIn) {
-                                handleLogout();
+                                loggedOut();
                             } else {
                                 navigate("/login");
                             }

@@ -1,7 +1,7 @@
 import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "../contex/UserContext";
-import useToken from "../costome Hooks/useToken";
+
 import { getUserById, loginIn } from "../services/userServices";
 import { errorMsg, successMsg } from "../services/toastify";
 import * as yup from "yup";
@@ -9,6 +9,7 @@ import { FormikValues, useFormik } from "formik";
 import { UserLogin } from "../interface/User";
 import { jwtDecode } from "jwt-decode";
 import { ThemeContext } from "../services/darklightTeme";
+import useToken from "../customeHooks/useToken";
 
 interface LoginProps {}
 
@@ -22,14 +23,14 @@ const Login: FunctionComponent<LoginProps> = () => {
     useEffect(() => {
         if (decodedToken && localStorage.token) {
             setIsLogedIn(true);
-            navigate("/");
         } else {
             setIsLogedIn(false);
             return;
         }
     }, [decodedToken]);
+
     useEffect(() => {
-        try {
+
             if (decodedToken && decodedToken._id)
                 getUserById(decodedToken._id)
                     .then(() => {
@@ -37,15 +38,13 @@ const Login: FunctionComponent<LoginProps> = () => {
                         setIsAdmin(decodedToken.isAdmin);
                         setIsBusiness(auth?.isBusiness as boolean);
                         setIsLogedIn(true);
+                        
                     })
                     .catch((err) => {
-                        successMsg(err);
+                        errorMsg("Failed to find user");
                         return;
                     });
-        } catch (err) {
-            errorMsg("Failed to find user");
-            console.error(err);
-        }
+        
     }, []);
 
     const validationSchema = yup.object({
@@ -69,13 +68,14 @@ const Login: FunctionComponent<LoginProps> = () => {
                 .then((res) => {
                     setIsLoading(false);
                     localStorage.setItem("token", res.data);
-                    navigate("/");
-                    const deco = jwtDecode(res.data);
-                    successMsg(`Welcome Back! 🥰 ${deco.nbf}`);
+                    // TODO: chang derction to cards
+                    navigate("/about");
+                    successMsg(`Welcome Back! 🥰`);
                 })
                 .catch((err) => {
                     setIsLoading(false);
                     errorMsg("Login failed, please try again.");
+                    console.error(err);
                 });
         },
     });

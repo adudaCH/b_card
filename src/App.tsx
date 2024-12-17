@@ -7,41 +7,43 @@ import "./App.css";
 import PageNotFound from "./components/PageNotFound";
 import { ThemeContext, themeMode } from "./services/darklightTeme";
 import Login from "./components/Login";
-
-
+import Register from "./components/Register";
+import { ToastContainer } from "react-toastify";
 
 function App() {
-    // Load theme preference from localStorage or set default to light mode
     const [theme, setTheme] = useState(() => {
         const savedTheme = localStorage.getItem("theme");
         return savedTheme ? JSON.parse(savedTheme) : false;
     });
 
-    // Save theme preference to localStorage whenever it changes
     useEffect(() => {
         localStorage.setItem("theme", JSON.stringify(theme));
     }, [theme]);
 
-    // Toggle theme between light and dark mode
     const toggleTheme = () => {
-        setTheme((theme: any)=>!theme);
+        setTheme((theme: any) => !theme);
     };
 
     return (
         <div className="App">
-                <ThemeContext.Provider value={theme? themeMode.dark:themeMode.light}>
+            <ToastContainer />
+
+            <ThemeContext.Provider
+                value={themeMode.dark ? themeMode.light : themeMode.dark}>
                 <Router>
-                    <Navbar changeMode ={toggleTheme} />
+                    <Navbar changeMode={toggleTheme} />
                     <Routes>
                         <Route path="/about" element={<About />} />
                         <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
                         <Route path="/fav-cards" element={<FavCards />} />
+                        {/* Commented out Profile Route */}
                         {/* <Route path="/profile" element={<Profile />} /> */}
                         <Route path="*" element={<PageNotFound />} />
                     </Routes>
                 </Router>
-                </ThemeContext.Provider>
-            </div>
+            </ThemeContext.Provider>
+        </div>
     );
 }
 
