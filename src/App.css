@@ -28,7 +28,7 @@
     width: 20px;
     height: 20px;
     border-radius: 100%;
-    background-color: rgb(101, 209, 225);
+    background-color: rgb(229, 212, 166);
     position: relative;
 }
 
@@ -63,4 +63,19 @@
     font-family: "Poppins", serif;
     font-weight: 500;
     font-style: normal;
+}
+/* card component */
+.img-card-top{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+.card{
+    background-color:#efe7e0;
+}
+.card-footer{
+    background-color: #eddbcb;
+    min-height: 6vh;
 }
