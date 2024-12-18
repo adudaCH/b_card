@@ -9,6 +9,7 @@ import { ThemeContext, themeMode } from "./services/darklightTeme";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import { ToastContainer } from "react-toastify";
+import Cards from "./components/Cards";
 
 function App() {
     const [theme, setTheme] = useState(() => {
@@ -16,35 +17,32 @@ function App() {
         return savedTheme ? JSON.parse(savedTheme) : false;
     });
 
-    useEffect(() => {
-        localStorage.setItem("theme", JSON.stringify(theme));
-    }, [theme]);
-
     const toggleTheme = () => {
-        setTheme((theme: any) => !theme);
+        setTheme((prevTheme: any) => !prevTheme);
     };
 
-    return (
-        <div className="App">
-            <ToastContainer />
+    useEffect(() => {
+        localStorage.setItem("theme", JSON.stringify(theme));
+        document.body.className = theme ? "dark" : "light"; // Dynamically apply class
+    }, [theme]);
 
-            <ThemeContext.Provider
-                value={themeMode.dark ? themeMode.light : themeMode.dark}>
-                <Router>
-                    <Navbar changeMode={toggleTheme} />
-                    <Routes>
-                        <Route path="/about" element={<About />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/register" element={<Register />} />
-                        <Route path="/fav-cards" element={<FavCards />} />
-                        {/* Commented out Profile Route */}
-                        {/* <Route path="/profile" element={<Profile />} /> */}
-                        <Route path="*" element={<PageNotFound />} />
-                    </Routes>
-                </Router>
-            </ThemeContext.Provider>
-        </div>
+    return (
+        <ThemeContext.Provider value={theme ? themeMode.dark : themeMode.light}>
+            <ToastContainer />
+            <Router>
+                <Navbar changeMode={toggleTheme} />
+                <Routes>
+                    <Route path="/about" element={<About />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/cards" element={<Cards />} />
+                    <Route path="/fav-cards" element={<FavCards />} />
+                    <Route path="*" element={<PageNotFound />} />
+                </Routes>
+            </Router>
+        </ThemeContext.Provider>
     );
 }
+
 
 export default App;

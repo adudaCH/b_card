@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { Cards } from "../interface/Crards";
+import { errorMsg } from "./toastify";
 
 const api: string = process.env.REACT_APP_API as string;
 
@@ -90,3 +91,25 @@ export const createNewCard = async (card: Cards) => {
     });
     return response;
 };
+
+export const deleteCardById = async (cardId: string) => {
+    const token: string | null = localStorage.getItem("token");
+    try {
+        const response = await axios.delete(`${api}/cards/${cardId}`, {
+            headers: {
+                "x-auth-token": token,
+                "Content-Type": "application/json",
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            errorMsg(`Internet connection error: ${error.response?.data || error.message}`);
+        } else {
+            errorMsg(`Unexpected error: ${error}`);
+        }
+    }
+};
+
+
