@@ -3,7 +3,7 @@ import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { FormikValues, useFormik } from "formik";
 import { User } from "../interface/User";
-import { ThemeContext } from "../services/darklightTeme";
+import { ThemeContext } from "../services/darkLightTheme";
 import { userInitialValues } from "../services/registerValuse";
 import { errorMsg, successMsg } from "../services/toastify";
 import { registerNewUser } from "../services/userServices";

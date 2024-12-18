@@ -6,11 +6,11 @@ import {
     useState,
 } from "react";
 import { data, NavigateFunction, useNavigate } from "react-router-dom";
-import { ThemeContext } from "../services/darklightTeme";
+import { ThemeContext } from "../services/darkLightTheme";
 import { getAllCards } from "../services/cardsServices";
 import { Cards } from "../interface/Crards";
 import Pagination from "react-bootstrap/Pagination";
-import { FaPenFancy, FaTrashAlt } from "react-icons/fa";
+import { FaHeart, FaPenFancy, FaTrashAlt } from "react-icons/fa";
 import DeleteModal from "./DeleteModal";
 interface HomeProps {}
 
@@ -116,12 +116,27 @@ const Home: FunctionComponent<HomeProps> = () => {
                                                 width: "19rem",
                                             }}>
                                             {card.description.length > 100
-                                                ? `${card.description.slice(0, 150)}...`
+                                                ? `${card.description.slice(
+                                                      0,
+                                                      150
+                                                  )}...`
                                                 : card.description}
                                         </p>
+                                        {/* TODO:if admin they can delete  and edit option from profile only  */}
+                                        {/* TODO: display like button if logged in */}
                                         <div className="card-footer d-flex justify-content-around">
-                                            <button className="btn btn-warning">
+                                            {/* <button className="btn btn-warning">
                                                 <FaPenFancy />
+                                            </button> */}
+                                            {/* TODO:fix the like btn and make it work */}
+                                            <button
+                                                className="likeBtn"
+                                                style={{
+                                                    backgroundColor:
+                                                        "transparent",
+                                                    border: "none",
+                                                }}>
+                                                <FaHeart />
                                             </button>
                                             <button
                                                 onClick={onshow}
@@ -157,4 +172,3 @@ const Home: FunctionComponent<HomeProps> = () => {
 };
 
 export default Home;
-

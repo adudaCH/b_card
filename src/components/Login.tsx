@@ -8,7 +8,7 @@ import * as yup from "yup";
 import { FormikValues, useFormik } from "formik";
 import { UserLogin } from "../interface/User";
 import { jwtDecode } from "jwt-decode";
-import { ThemeContext } from "../services/darklightTeme";
+import { ThemeContext } from "../services/darkLightTheme";
 import useToken from "../customeHooks/useToken";
 
 interface LoginProps {}
@@ -30,21 +30,18 @@ const Login: FunctionComponent<LoginProps> = () => {
     }, [decodedToken]);
 
     useEffect(() => {
-
-            if (decodedToken && decodedToken._id)
-                getUserById(decodedToken._id)
-                    .then(() => {
-                        setAuth({ ...decodedToken, isAdmin: isAdmin });
-                        setIsAdmin(decodedToken.isAdmin);
-                        setIsBusiness(auth?.isBusiness as boolean);
-                        setIsLogedIn(true);
-                        
-                    })
-                    .catch((err) => {
-                        errorMsg("Failed to find user");
-                        return;
-                    });
-        
+        if (decodedToken && decodedToken._id)
+            getUserById(decodedToken._id)
+                .then(() => {
+                    setAuth({ ...decodedToken, isAdmin: isAdmin });
+                    setIsAdmin(decodedToken.isAdmin);
+                    setIsBusiness(auth?.isBusiness as boolean);
+                    setIsLogedIn(true);
+                })
+                .catch((err) => {
+                    errorMsg("Failed to find user");
+                    return;
+                });
     }, []);
 
     const validationSchema = yup.object({
@@ -80,59 +77,81 @@ const Login: FunctionComponent<LoginProps> = () => {
         },
     });
     return (
-        <main style={{ backgroundColor: theme.background, color: theme.color, minHeight: "100vh" }}>
-    <div className="d-flex justify-content-center align-items-center min-vh-100">
-        <div className="container w-25 p-4 shadow-lg rounded" style={{ backgroundColor: theme.background || "#fff" }}>
-            <h1 className="poppins-regular text-center mb-4">LOGIN</h1>
-            <form onSubmit={formik.handleSubmit}>
-                <div className="form-floating mb-3">
-                    <input
-                        type="email"
-                        className={`form-control ${formik.touched.email && formik.errors.email ? "is-invalid" : ""}`}
-                        id="floatingInput2"
-                        placeholder="name@example.com"
-                        value={formik.values.email}
-                        name="email"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                    />
-                    <label htmlFor="floatingInput2">Email address</label>
-                    {formik.touched.email && formik.errors.email && (
-                        <div className="invalid-feedback">{formik.errors.email}</div>
-                    )}
+        <main
+            style={{
+                backgroundColor: theme.background,
+                color: theme.color,
+                minHeight: "100vh",
+            }}>
+            <div className="d-flex justify-content-center align-items-center min-vh-100">
+                <div
+                    className="container w-25 p-4 shadow-lg rounded"
+                    style={{ backgroundColor: theme.background || "#fff" }}>
+                    <h1 className="poppins-regular text-center mb-4">LOGIN</h1>
+                    <form onSubmit={formik.handleSubmit}>
+                        <div className="form-floating mb-3">
+                            <input
+                                type="email"
+                                className={`form-control ${
+                                    formik.touched.email && formik.errors.email
+                                        ? "is-invalid"
+                                        : ""
+                                }`}
+                                id="floatingInput2"
+                                placeholder="name@example.com"
+                                value={formik.values.email}
+                                name="email"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                            <label htmlFor="floatingInput2">
+                                Email address
+                            </label>
+                            {formik.touched.email && formik.errors.email && (
+                                <div className="invalid-feedback">
+                                    {formik.errors.email}
+                                </div>
+                            )}
+                        </div>
+                        <div className="form-floating mb-3">
+                            <input
+                                type="password"
+                                className={`form-control ${
+                                    formik.touched.password &&
+                                    formik.errors.password
+                                        ? "is-invalid"
+                                        : ""
+                                }`}
+                                id="floatingPassword"
+                                placeholder="Password"
+                                value={formik.values.password}
+                                name="password"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                            <label htmlFor="floatingPassword">Password</label>
+                            {formik.touched.password &&
+                                formik.errors.password && (
+                                    <div className="invalid-feedback">
+                                        {formik.errors.password}
+                                    </div>
+                                )}
+                        </div>
+                        <button
+                            className="btn btn-dark mt-3 w-100"
+                            type="submit"
+                            disabled={!formik.dirty || !formik.isValid}>
+                            Login
+                        </button>
+                    </form>
+                    <p className="mt-3 text-center">
+                        <Link to="/register">New user? Register now</Link>
+                    </p>
                 </div>
-                <div className="form-floating mb-3">
-                    <input
-                        type="password"
-                        className={`form-control ${formik.touched.password && formik.errors.password ? "is-invalid" : ""}`}
-                        id="floatingPassword"
-                        placeholder="Password"
-                        value={formik.values.password}
-                        name="password"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                    />
-                    <label htmlFor="floatingPassword">Password</label>
-                    {formik.touched.password && formik.errors.password && (
-                        <div className="invalid-feedback">{formik.errors.password}</div>
-                    )}
-                </div>
-                <button
-                    className="btn btn-dark mt-3 w-100"
-                    type="submit"
-                    disabled={!formik.dirty || !formik.isValid}
-                >
-                    Login
-                </button>
-            </form>
-            <p className="mt-3 text-center">
-                <Link to="/register">New user? Register now</Link>
-            </p>
-        </div>
-    </div>
-</main>
-// TODO: add a loading Animation after the user clicked "login"
-            );
+            </div>
+        </main>
+        // TODO: add a loading Animation after the user clicked "login"
+    );
 };
 
 export default Login;

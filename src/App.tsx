@@ -5,7 +5,7 @@ import About from "./components/About";
 import FavCards from "./components/FavCards";
 import "./App.css";
 import PageNotFound from "./components/PageNotFound";
-import { ThemeContext, themeMode } from "./services/darklightTeme";
+import { ThemeContext, themeMode } from "./services/darkLightTheme";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import { ToastContainer } from "react-toastify";
@@ -43,6 +43,5 @@ function App() {
         </ThemeContext.Provider>
     );
 }
-
 
 export default App;

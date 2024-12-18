@@ -21,7 +21,7 @@ import {
 import { setDefaultImg } from "../services/userImag";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { GrLogin, GrLogout } from "react-icons/gr";
-import { ThemeContext, themeMode } from "../services/darklightTeme";
+import { ThemeContext, themeMode } from "../services/darkLightTheme";
 import { useUserContext } from "../contex/UserContext";
 import useToken from "../customeHooks/useToken";
 
@@ -42,7 +42,6 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
     const theme = useContext(ThemeContext);
     const { decodedToken } = useToken();
 
-    
     // const userTools = {
     //     loggedIn: localStorage.getItem("token") !== null,
     // };
@@ -108,7 +107,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                         </NavLink>
                     )}
                 </Nav>
-                    {/* TODO:activate the card search */}
+                {/* TODO:activate the card search */}
                 {/* Search Bar */}
                 <Form className="d-flex me-3">
                     <FormControl
