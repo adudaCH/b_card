@@ -84,7 +84,7 @@ const Home: FunctionComponent<HomeProps> = () => {
                                 <div
                                     className="card"
                                     style={{
-                                        maxWidth: "26rem",
+                                        maxWidth: "24rem",
                                         height: "70vh",
                                     }}>
                                     <div className="card-body">
