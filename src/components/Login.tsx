@@ -65,8 +65,7 @@ const Login: FunctionComponent<LoginProps> = () => {
                 .then((res) => {
                     setIsLoading(false);
                     localStorage.setItem("token", res.data);
-                    // TODO: chang derction to cards
-                    navigate("/about");
+                    navigate("/");
                     successMsg(`Welcome Back! 🥰`);
                 })
                 .catch((err) => {

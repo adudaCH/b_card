@@ -24,6 +24,7 @@ import { GrLogin, GrLogout } from "react-icons/gr";
 import { ThemeContext, themeMode } from "../services/darkLightTheme";
 import { useUserContext } from "../contex/UserContext";
 import useToken from "../customeHooks/useToken";
+import { getAllUsers } from "../services/userServices";
 
 interface NavbarProps {
     changeMode: Function;
@@ -41,10 +42,24 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
     } = useUserContext();
     const theme = useContext(ThemeContext);
     const { decodedToken } = useToken();
+    const [user, setUser] = useState<{ name: { first: string; last: string } } | null>(null); 
 
-    // const userTools = {
-    //     loggedIn: localStorage.getItem("token") !== null,
-    // };
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const users: { _id: string; name: { first: string; last: string } }[] = await getAllUsers();
+                const loggedInUser = users.find((u) => u._id === decodedToken?._id); // Find the logged-in user by ID
+                setUser(loggedInUser || null); // Set the user state
+            } catch (error) {
+                console.error("Failed to fetch users:", error);
+            }
+        };
+    
+        if (isLogedIn && decodedToken?._id) {
+            fetchUsers();
+        }
+    }, [isLogedIn, decodedToken]);
+
     useEffect(() => {
         if (decodedToken) {
             setAuth(decodedToken);
@@ -63,8 +78,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
         setIsBusiness(false);
         setIsLogedIn(false);
         localStorage.removeItem("token");
-        // TODO: chang derction to cards
-        navigate("/about");
+        navigate("/");
     };
 
     return (
@@ -87,7 +101,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                         About
                     </NavLink>
 
-                    <NavLink className={"nav-link"} to="/cards">
+                    <NavLink className={"nav-link"} to="/">
                         Cards
                     </NavLink>
                     {isLogedIn && (
@@ -123,17 +137,29 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
 
                 {/* Icons */}
                 <Nav>
+                    <div className="d-flex align-items-center justify-content-center">
                     <Button
                         style={{ color: theme.color }}
                         className="navIcon "
                         onClick={() => changeMode()}>
                         <FaMoon className="navIcon" />
                     </Button>
+                    {/* TODO: keep tying the google thing */}
                     <Button
-                        // TODO:if logged in show the google thing
                         className="navIcon"
-                        onClick={() => navigate("/profile")}>
-                        {!isLogedIn && <FaUserCircle />}
+                        onClick={() =>
+                            navigate(isLogedIn ? "/profile" : "/login")
+                        }> 
+                        {!isLogedIn ? (
+                            <FaUserCircle />
+                        ) : (
+                            <div className="userIcon d-flex justify-content-center align-items-center">
+                                {setDefaultImg(
+                                    user?.name?.first || "",
+                                    user?.name?.last || ""
+                                ).join("")}
+                            </div>
+                        )}
                     </Button>
                     <Button
                         className="navIcon"
@@ -150,6 +176,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                             <GrLogin className="navIcon" />
                         )}
                     </Button>
+                    </div>
                 </Nav>
             </BootstrapNavbar.Collapse>
         </BootstrapNavbar>

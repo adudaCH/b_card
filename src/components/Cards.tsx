@@ -5,17 +5,23 @@ import {
     useEffect,
     useState,
 } from "react";
-import { data, NavigateFunction, useNavigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../services/darkLightTheme";
 import { getAllCards } from "../services/cardsServices";
 import { Cards } from "../interface/Crards";
 import Pagination from "react-bootstrap/Pagination";
-import { FaHeart, FaPenFancy, FaTrashAlt } from "react-icons/fa";
+import { FaHeart, FaTrashAlt } from "react-icons/fa";
 import DeleteModal from "./DeleteModal";
+import Loading from "./Loading";
+import { useUserContext } from "../contex/UserContext";
+import { errorMsg } from "../services/toastify";
+
 interface HomeProps {}
 
 const Home: FunctionComponent<HomeProps> = () => {
     const navigate: NavigateFunction = useNavigate();
+    const [searchTerm, setSearchTerm] = useState<string>("");
+    const { isAdmin, isLogedIn, isBusiness } = useUserContext();
     const theme = useContext(ThemeContext);
     const [cards, setCards] = useState<Cards[]>([]);
     const [render, setRender] = useState<boolean>(false);
@@ -23,6 +29,7 @@ const Home: FunctionComponent<HomeProps> = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const cardsPerPage = 6;
 
+    // Fetch cards from the server
     useEffect(() => {
         try {
             getAllCards()
@@ -67,6 +74,37 @@ const Home: FunctionComponent<HomeProps> = () => {
         );
     }
 
+    // LikeButton component (local to Home)
+    const LikeButton = () => {
+        const [isLiked, setIsLiked] = useState(false);
+
+        const handleLike = () => {
+            if (!isLogedIn) {
+                errorMsg("You need to log in as a user"); 
+                return;
+            }
+            setIsLiked((prev) => !prev); // Toggle like state
+        };
+
+        return (
+            <button
+                onClick={handleLike}
+                className="likeBtn"
+                style={{
+                    backgroundColor: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                }}>
+                <FaHeart
+                    style={{
+                        color: isLiked ? "red" : "gray", // Toggle color
+                        fontSize: "20px",
+                    }}
+                />
+            </button>
+        );
+    };
+
     return (
         <main
             style={{
@@ -76,7 +114,7 @@ const Home: FunctionComponent<HomeProps> = () => {
             }}>
             <div className="container">
                 <div className="row sm-auto">
-                    {cards.length > 0 ? ( // Check if cards exist
+                    {cards.length > 0 ? (
                         currentCards.map((card: Cards) => (
                             <div
                                 className="col-12 col-md-6 col-xl-4 my-3"
@@ -116,34 +154,20 @@ const Home: FunctionComponent<HomeProps> = () => {
                                                 width: "19rem",
                                             }}>
                                             {card.description.length > 100
-                                                ? `${card.description.slice(
-                                                      0,
-                                                      150
-                                                  )}...`
+                                                ? `${card.description.slice(0, 150)}...`
                                                 : card.description}
                                         </p>
-                                        {/* TODO:if admin they can delete  and edit option from profile only  */}
-                                        {/* TODO: display like button if logged in */}
+                                        {/* TODO:don't display if logged out */}
                                         <div className="card-footer d-flex justify-content-around">
-                                            {/* <button className="btn btn-warning">
-                                                <FaPenFancy />
-                                            </button> */}
-                                            {/* TODO:fix the like btn and make it work */}
-                                            <button
-                                                className="likeBtn"
-                                                style={{
-                                                    backgroundColor:
-                                                        "transparent",
-                                                    border: "none",
-                                                }}>
-                                                <FaHeart />
-                                            </button>
-                                            <button
-                                                onClick={onshow}
-                                                className="btn btn-danger"
-                                                key={card._id}>
-                                                <FaTrashAlt />
-                                            </button>
+                                            <LikeButton />
+                                            {isAdmin && (
+                                                <button
+                                                    onClick={onshow}
+                                                    className="btn btn-danger"
+                                                    key={card._id}>
+                                                    <FaTrashAlt />
+                                                </button>
+                                            )}
                                             <DeleteModal
                                                 show={show}
                                                 onHide={onHide}
@@ -161,7 +185,7 @@ const Home: FunctionComponent<HomeProps> = () => {
                         </div>
                     )}
                 </div>
-                {cards.length > 0 && ( // Show pagination only if cards exist
+                {cards.length > 0 && (
                     <div className="d-flex justify-content-center my-3">
                         <Pagination>{paginationItems}</Pagination>
                     </div>

@@ -7,7 +7,7 @@ const About: FunctionComponent<AboutProps> = () => {
     const theme = useContext(ThemeContext);
 
     return (
-        <main style={{ backgroundColor: theme.background, color: theme.color }}>
+        <main style={{ backgroundColor: theme.background, color: theme.color, minHeight:"100vh"  }}>
             <div className="fluid-container w-75 p-5">
                 <h1 className="about">About Us</h1>
 

@@ -10,6 +10,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import { ToastContainer } from "react-toastify";
 import Cards from "./components/Cards";
+import Profile from "./components/Profile";
 
 function App() {
     const [theme, setTheme] = useState(() => {
@@ -35,7 +36,8 @@ function App() {
                     <Route path="/about" element={<About />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
-                    <Route path="/cards" element={<Cards />} />
+                    <Route path="/" element={<Cards />} />
+                    <Route path="/profile" element={<Profile />} />
                     <Route path="/fav-cards" element={<FavCards />} />
                     <Route path="*" element={<PageNotFound />} />
                 </Routes>

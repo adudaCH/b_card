@@ -25,12 +25,13 @@
 }
 
 .userIcon {
-    color: white;
+    color: black;
     font-size:1.5rem;
     width: 20px;
     height: 20px;
     border-radius: 100%;
-    background-color:transparent;
+    background-color:lightsalmon;
+    padding: 16px;
     position: relative;
 }
 
