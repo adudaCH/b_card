@@ -91,11 +91,11 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                 BCard
             </BootstrapNavbar.Brand>
 
-            {/* Toggle for mobile */}
+
             <BootstrapNavbar.Toggle aria-controls="navbar-nav" />
 
             <BootstrapNavbar.Collapse id="navbar-nav">
-                {/* Navigation Links */}
+        
                 <Nav className="me-auto">
                     <NavLink className={"nav-link"} to="/about">
                         About
@@ -104,6 +104,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                     <NavLink className={"nav-link"} to="/">
                         Cards
                     </NavLink>
+                    {/* TODO:create the two components */}
                     {isLogedIn && (
                         <>
                             <NavLink className={"nav-link"} to="/fav-cards">

@@ -119,52 +119,61 @@ export const deleteCardById = async (cardId: string) => {
 // };
 
 
-// like the card
-
-export async function cardLikes(id: string) {
-    let response = await getCardById(id);
-    let cardData: string[] = response.data.likes;
-
-    return cardData;
-};
-
-export async function userLikes(userId: string) {
-    try {
-
-        const response = await getAllCards();
-        const cardsData = response.data;
 
 
-        if (cardsData.length > 0) {
-            const userLikedCards = cardsData.filter((card: Card) => card.likes?.includes(userId));
-            return userLikedCards;
-        }
+// export async function cardLikes(id: string) {
+//     let response = await getCardById(id);
+//     let cardData: string[] = response.data.likes;
 
-        return [];
-    } catch (error) {
-        console.log(error);
-        return [];
-    }
+//     return cardData;
+// };
+
+// export async function userLikes(userId: string) {
+//     try {
+
+//         const response = await getAllCards();
+//         const cardsData = response.data;
+
+
+//         if (cardsData.length > 0) {
+//             const userLikedCards = cardsData.filter((card: Cards) => card.likes?.includes(userId));
+//             return userLikedCards;
+//         }
+
+//         return [];
+//     } catch (error) {
+//         console.log(error);
+//         return [];
+//     }
+// }
+
+
+
+
+
+export function getCardById(id: string) {
+    return axios.get(`${api}/${id}`)
 }
 
 
 
 
-export async function like(id: string, userId: string) {
-    try {
 
-        let cardData: string[] = await cardLikes(id);
+// export async function like(id: string, userId: string) {
+//     try {
 
-        if (cardData.includes(userId)) {
-            cardData = cardData.filter((like) => like !== userId);
-            await axios.patch(${api}/${id}, {likes: cardData}, { headers: { 'x-auth-token': localStorage.token } });
-        } else {
-            cardData.push(userId);
-            await axios.patch(${api}/${id}, {
-                likes: cardData
-            }, { headers: { 'x-auth-token': localStorage.token } });
-        }
-    } catch (error) {
-        console.log(error);
-    }
-};
+//         let cardData: string[] = await cardLikes(id);
+
+//         if (cardData.includes(userId)) {
+//             cardData = cardData.filter((like) => like !== userId);
+//             await axios.patch(${api}/${id}, {likes: cardData}, { headers: { 'x-auth-token': localStorage.token } });
+//         } else {
+//             cardData.push(userId);
+//             await axios.patch(${api}/${id}, {
+//                 likes: cardData
+//             }, { headers: { 'x-auth-token': localStorage.token } });
+//         }
+//     } catch (error) {
+//         console.log(error);
+//     }
+// };

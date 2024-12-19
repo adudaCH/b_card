@@ -50,8 +50,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
                 .required("Password is required")
                 .min(9, "Password must be at least Nine characters")
                 .max(20, "Password must be at most Twenty characters")
-                .matches(
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*-]).{9,}$/,
+                .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*-]).{9,}$/,
                     "Password must include an uppercase letter, a lowercase letter, a number, and one of the following characters: !@#$%^&*-"
                 ),
             image: yup.object({
@@ -84,21 +83,16 @@ const Register: FunctionComponent<RegisterProps> = () => {
 
     return (
         <main
-            style={{
-                backgroundColor: theme.background,
-                color: theme.color,
-                minHeight: "100vh",
-            }}>
+            style={{ backgroundColor: theme.background, color: theme.color, minHeight: "100vh"}}>
             <div className="container d-flex justify-content-center align-items-center">
                 <div className="row w-75">
                     <div className="col-md-12  text-center">
-                        <h2 className="poppins-regular mb-4">REGISETR</h2>
+                        <h2 className="poppins-regular mb-4">REGISTER</h2>
                     </div>
                     <div className="col-md-12">
                         <form
                             onSubmit={formik.handleSubmit}
                             className="row g-3">
-                            {/* First Name */}
                             <div className="col-md-6">
                                 <label htmlFor="first" className="form-label">
                                     First Name *
@@ -120,8 +114,6 @@ const Register: FunctionComponent<RegisterProps> = () => {
                                         </p>
                                     )}
                             </div>
-
-                            {/* Middle Name */}
                             <div className="col-md-6">
                                 <label htmlFor="middle" className="form-label">
                                     Middle Name
@@ -137,8 +129,6 @@ const Register: FunctionComponent<RegisterProps> = () => {
                                     onBlur={formik.handleBlur}
                                 />
                             </div>
-
-                            {/* Last Name */}
                             <div className="col-md-6">
                                 <label htmlFor="last" className="form-label">
                                     Last Name *
@@ -160,8 +150,6 @@ const Register: FunctionComponent<RegisterProps> = () => {
                                         </p>
                                     )}
                             </div>
-
-                            {/* Phone */}
                             <div className="col-md-6">
                                 <label htmlFor="phone" className="form-label">
                                     Phone *
@@ -183,8 +171,6 @@ const Register: FunctionComponent<RegisterProps> = () => {
                                         </p>
                                     )}
                             </div>
-
-                            {/* Email */}
                             <div className="col-md-6">
                                 <label htmlFor="email" className="form-label">
                                     Email *
@@ -206,8 +192,6 @@ const Register: FunctionComponent<RegisterProps> = () => {
                                         </p>
                                     )}
                             </div>
-
-                            {/* Password */}
                             <div className="col-md-6 position-relative">
                                 <label
                                     htmlFor="password"
@@ -215,11 +199,11 @@ const Register: FunctionComponent<RegisterProps> = () => {
                                     Password *
                                 </label>
                                 <div className="position-relative">
-                                    {/* Password Input */}
+                                    
                                     <input
                                         type={
                                             showPassword ? "text" : "password"
-                                        } // Dynamic type toggle
+                                        } 
                                         className="form-control"
                                         id="password"
                                         placeholder="Password"
@@ -228,8 +212,6 @@ const Register: FunctionComponent<RegisterProps> = () => {
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                     />
-
-                                    {/* Toggle Button */}
                                     <button
                                         type="button"
                                         className="btn position-absolute end-0 top-50 translate-middle-y"
@@ -257,8 +239,6 @@ const Register: FunctionComponent<RegisterProps> = () => {
                                         </p>
                                     )}
                             </div>
-
-                            {/* Image URL */}
                             <div className="col-md-6">
                                 <label
                                     htmlFor="imageUrl"
@@ -276,8 +256,6 @@ const Register: FunctionComponent<RegisterProps> = () => {
                                     onBlur={formik.handleBlur}
                                 />
                             </div>
-
-                            {/* Image Alt */}
                             <div className="col-md-6">
                                 <label
                                     htmlFor="imageAlt"
@@ -295,8 +273,6 @@ const Register: FunctionComponent<RegisterProps> = () => {
                                     onBlur={formik.handleBlur}
                                 />
                             </div>
-
-                            {/* State */}
                             <div className="col-md-6">
                                 <label htmlFor="state" className="form-label">
                                     State
@@ -312,8 +288,6 @@ const Register: FunctionComponent<RegisterProps> = () => {
                                     onBlur={formik.handleBlur}
                                 />
                             </div>
-
-                            {/* Country */}
                             <div className="col-md-6">
                                 <label htmlFor="country" className="form-label">
                                     Country *
@@ -329,8 +303,6 @@ const Register: FunctionComponent<RegisterProps> = () => {
                                     onBlur={formik.handleBlur}
                                 />
                             </div>
-
-                            {/* City */}
                             <div className="col-md-6">
                                 <label htmlFor="city" className="form-label">
                                     City *
@@ -346,8 +318,6 @@ const Register: FunctionComponent<RegisterProps> = () => {
                                     onBlur={formik.handleBlur}
                                 />
                             </div>
-
-                            {/* Street */}
                             <div className="col-md-6">
                                 <label htmlFor="street" className="form-label">
                                     Street *
@@ -363,8 +333,6 @@ const Register: FunctionComponent<RegisterProps> = () => {
                                     onBlur={formik.handleBlur}
                                 />
                             </div>
-
-                            {/* House Number */}
                             <div className="col-md-6">
                                 <label
                                     htmlFor="houseNumber"
@@ -382,8 +350,6 @@ const Register: FunctionComponent<RegisterProps> = () => {
                                     onBlur={formik.handleBlur}
                                 />
                             </div>
-
-                            {/* ZIP */}
                             <div className="col-md-6">
                                 <label htmlFor="zip" className="form-label">
                                     ZIP
@@ -399,8 +365,6 @@ const Register: FunctionComponent<RegisterProps> = () => {
                                     onBlur={formik.handleBlur}
                                 />
                             </div>
-
-                            {/* Signup as Business */}
                             <div className="col-12 form-check">
                                 <input
                                     type="checkbox"
@@ -416,8 +380,6 @@ const Register: FunctionComponent<RegisterProps> = () => {
                                     Signup as business
                                 </label>
                             </div>
-
-                            {/* Buttons */}
                             <div className="col-6">
                                 <button
                                     className="btn btn-danger w-100"

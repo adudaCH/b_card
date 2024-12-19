@@ -10,8 +10,7 @@ const About: FunctionComponent<AboutProps> = () => {
         <main style={{ backgroundColor: theme.background, color: theme.color, minHeight:"100vh"  }}>
             <div className="fluid-container w-75 p-5">
                 <h1 className="about">About Us</h1>
-
-                <p className="lh-base about">
+                    <p className="lh-base about">
                     Welcome to the future of networking! Our Business Card Web
                     App is designed to revolutionize the way you connect with
                     others, both personally and professionally. Gone are the
@@ -26,7 +25,7 @@ const About: FunctionComponent<AboutProps> = () => {
                     out. You can showcase your contact information, portfolio,
                     social media links, and even integrate QR codes, all in a
                     beautifully crafted card that's just a click away.
-                </p>
+                    </p>
 
                 <ul className="about">
                     <li>

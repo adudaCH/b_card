@@ -17,7 +17,7 @@ import { useUserContext } from "../contex/UserContext";
 import { FaPenFancy, FaTrashAlt } from "react-icons/fa";
 
 interface ProfileProps {}
-
+// TODO: see what is up with the profile
 const Profile: FunctionComponent<ProfileProps> = () => {
     const [user, setUser] = useState<any>({});
     const [isLoadnig, setIsLoading] = useState<boolean>(true);

@@ -1,6 +1,7 @@
 import { FunctionComponent, useContext } from "react";
-import styless from "../loading.module.css";
 import { ThemeContext } from "../services/darkLightTheme";
+import  classes from "./LoadingComponenet.module.css"
+
 
 interface LoadingProps {}
 
@@ -10,16 +11,9 @@ const Loading: FunctionComponent<LoadingProps> = () => {
     return (
         <main
             style={{
-                backgroundColor: theme.background,
-                color: theme.color,
-                minHeight: "100vh",
-				display:"flex",
-				justifyContent:"center",
-				alignItems:"center",
-				height:"calc(100vh - 60px)"
-            }}>
-            
-            <div className="loader">
+                backgroundColor: theme.background, color: theme.color, minHeight: "100vh", display:"flex",
+                justifyContent:"center", alignItems:"center", height:"calc(100vh - 60px)"}}>
+            <div className= "loader">
                 <div className="circle">
                     <div className="dot"></div>
                     <div className="outline"></div>
