@@ -1,8 +1,9 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useContext } from "react";
 import { Button, Modal } from "react-bootstrap";
 
 import { successMsg } from "../services/toastify";
 import { deleteCardById } from "../services/cardsServices";
+
 
 
 interface DeleteModalProps {
@@ -13,13 +14,14 @@ interface DeleteModalProps {
 }
 
 const DeleteModal: FunctionComponent<DeleteModalProps> = ({
+
     show,
     onHide,
     refresh,
     productId,
 }) => {
     return (
-        <>
+            <div className="container">
         <Modal
             show={show}
             onHide={() => onHide()}
@@ -33,7 +35,7 @@ const DeleteModal: FunctionComponent<DeleteModalProps> = ({
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-            are you sure you want to delete dis product?
+            are you sure you want to delete?
             </Modal.Body>
             <Modal.Footer>
             <Button variant="danger" onClick={()=>{
@@ -50,7 +52,7 @@ const DeleteModal: FunctionComponent<DeleteModalProps> = ({
             }}>Cancel</Button>
             </Modal.Footer>
         </Modal>
-        </>
+        </div>
         );
 };
 

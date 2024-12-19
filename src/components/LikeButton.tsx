@@ -1,5 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
-// import { cardLikes } from "../services/cardsServices";
+import { cardLikes } from "../services/cardsServices";
+
 
 interface LikeButtonProps {
     cardId: string;
@@ -11,15 +12,15 @@ const LikeButton: FunctionComponent<LikeButtonProps> = ({ cardId, userId }) => {
     const { updateCardLikes } = useCardContext();
 
 
-    // useEffect(() => {
-    //     const fetchLikes = async () => {
+    useEffect(() => {
+        const fetchLikes = async () => {
 
 
-    //         const likes = await cardLikes(cardId);
-    //         setAsLike(likes.includes(userId));
-    //     };
-    //     fetchLikes();
-    // }, [cardId, userId]);
+            const likes = await cardLikes(cardId);
+            setAsLike(likes.includes(userId));
+        };
+        fetchLikes();
+    }, [cardId, userId]);
 
     const handleLikeClick = async () => {
 

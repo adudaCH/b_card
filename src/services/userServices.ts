@@ -43,6 +43,10 @@ export const getUserById = async (userId: User) => {
 	}
 };
 
+export function secondGetUserById(id:string){
+	return axios.get(`${api}/${id}`, {headers: {'x-auth-token': localStorage.token}})
+}
+
 // Register a new user
 export const registerNewUser = (user: User) => {
 	const response = axios.request({
@@ -68,3 +72,17 @@ export const deleteUserById = async (userId: string) => {
 	}
 };
 
+
+
+
+export async function userDetails(userId: string) {
+	try {
+		let res = await secondGetUserById(userId)
+		let user:User = res.data
+		console.log(user);
+		
+	} catch (error) {
+		console.log(error);
+		
+	}
+}

@@ -104,7 +104,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                     <NavLink className={"nav-link"} to="/">
                         Cards
                     </NavLink>
-                    {/* TODO:create the two components */}
+                    {/* {/* TODO:create the two components */}
                     {isLogedIn && (
                         <>
                             <NavLink className={"nav-link"} to="/fav-cards">

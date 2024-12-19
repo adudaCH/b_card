@@ -113,20 +113,17 @@ export const deleteCardById = async (cardId: string) => {
 };
 
 
-// export const updateCardLikes = async (cardId: string) => {
-//     const res = await axios.patch(`/api/cards/${cardId}/like`);
-//     return res.data;
-// };
 
 
 
 
-// export async function cardLikes(id: string) {
-//     let response = await getCardById(id);
-//     let cardData: string[] = response.data.likes;
 
-//     return cardData;
-// };
+export async function cardLikes(id: string) {
+    let response = await getCardById(id);
+    let cardData: string[] = response.data.likes;
+
+    return cardData;
+};
 
 // export async function userLikes(userId: string) {
 //     try {

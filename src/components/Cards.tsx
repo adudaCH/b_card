@@ -7,13 +7,15 @@ import {
 } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../services/darkLightTheme";
-import { getAllCards, updateCardLikes } from "../services/cardsServices"; // Ensure updateCardLikes exists
+import { getAllCards } from "../services/cardsServices"; // Ensure updateCardLikes exists
 import { Cards } from "../interface/Crards";
 import Pagination from "react-bootstrap/Pagination";
 import { FaHeart, FaTrashAlt } from "react-icons/fa";
 import DeleteModal from "./DeleteModal";
 import { useUserContext } from "../contex/UserContext";
 import { errorMsg, successMsg } from "../services/toastify";
+import LikeButton from "./LikeButton";
+import { userDetails } from "../services/userServices";
 
 interface HomeProps {}
 
@@ -27,6 +29,9 @@ const Home: FunctionComponent<HomeProps> = () => {
     const [show, setShow] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const cardsPerPage = 6;
+        useEffect(()=>{
+            userDetails()
+        })
 
     // Fetch cards from the server
     useEffect(() => {
@@ -48,23 +53,23 @@ const Home: FunctionComponent<HomeProps> = () => {
     const onHide = useCallback(() => setShow(false), []);
     const onShow = useCallback(() => setShow(true), []);
 
-    const handleLike = async (cardId: string) => {
-        try {
-            const updatedCards = cards.map((card) =>
-                card._id === cardId
-                    ? { ...card, likes: [...card.likes, "newLike"] } // Increment likes array
-                    : card
-            );
-            setCards(updatedCards);
+    // const handleLike = async (cardId: string) => {
+    //     try {
+    //         const updatedCards = cards.map((card) =>
+    //             card._id === cardId
+    //                 ? { ...card, likes: [...card.likes, "newLike"] } // Increment likes array
+    //                 : card
+    //         );
+    //         setCards(updatedCards);
     
-            // Update on the server
-            await updateCardLikes(cardId);
+    //         // Update on the server
+    //         await updateCardLikes(cardId);
     
-            successMsg("You liked the card!");
-        } catch (error) {
-            errorMsg("Failed to like the card.");
-        }
-    };
+    //         successMsg("You liked the card!");
+    //     } catch (error) {
+    //         errorMsg("Failed to like the card.");
+    //     }
+    // };
     const indexOfLastCard = currentPage * cardsPerPage;
     const indexOfFirstCard = indexOfLastCard - cardsPerPage;
     const currentCards = cards.slice(indexOfFirstCard, indexOfLastCard);
@@ -84,13 +89,7 @@ const Home: FunctionComponent<HomeProps> = () => {
     ));
 
     return (
-        <main
-            style={{
-                backgroundColor: theme.background,
-                color: theme.color,
-                minHeight: "100vh",
-            }}
-        >
+        <main style={{ backgroundColor: theme.background, color: theme.color, minHeight: "100vh",}}>
             <div className="container">
                 <div className="row sm-auto">
                     {cards.length > 0 ? (
@@ -143,20 +142,7 @@ const Home: FunctionComponent<HomeProps> = () => {
                                         {isLogedIn && (
                                             <div className="card-footer d-flex justify-content-around">
                                                 {/* Like button */}
-                                                <button
-                                                    className="likeBtn"
-                                                    style={{
-                                                        backgroundColor: "transparent",
-                                                        border: "none",
-                                                        color: card.likes.length > 0 ? "red" : "black", // Use length
-                                                    }}
-                                                    onClick={() =>
-                                                        handleLike(card._id)
-                                                    }
-                                                >
-                                                    <FaHeart /> {card.likes || 0}
-                                                </button>
-                                                {/* Show delete button only for admins */}
+                                                <LikeButton cardId={card._id} userId={user._id} />
                                                 {isAdmin && (
                                                     <>
                                                         <button
@@ -165,6 +151,7 @@ const Home: FunctionComponent<HomeProps> = () => {
                                                         >
                                                             <FaTrashAlt />
                                                         </button>
+                                                        {/* TODO:make the modal work */}
                                                         <DeleteModal
                                                             show={show}
                                                             onHide={onHide}
