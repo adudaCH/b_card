@@ -113,3 +113,58 @@ export const deleteCardById = async (cardId: string) => {
 };
 
 
+// export const updateCardLikes = async (cardId: string) => {
+//     const res = await axios.patch(`/api/cards/${cardId}/like`);
+//     return res.data;
+// };
+
+
+// like the card
+
+export async function cardLikes(id: string) {
+    let response = await getCardById(id);
+    let cardData: string[] = response.data.likes;
+
+    return cardData;
+};
+
+export async function userLikes(userId: string) {
+    try {
+
+        const response = await getAllCards();
+        const cardsData = response.data;
+
+
+        if (cardsData.length > 0) {
+            const userLikedCards = cardsData.filter((card: Card) => card.likes?.includes(userId));
+            return userLikedCards;
+        }
+
+        return [];
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
+}
+
+
+
+
+export async function like(id: string, userId: string) {
+    try {
+
+        let cardData: string[] = await cardLikes(id);
+
+        if (cardData.includes(userId)) {
+            cardData = cardData.filter((like) => like !== userId);
+            await axios.patch(${api}/${id}, {likes: cardData}, { headers: { 'x-auth-token': localStorage.token } });
+        } else {
+            cardData.push(userId);
+            await axios.patch(${api}/${id}, {
+                likes: cardData
+            }, { headers: { 'x-auth-token': localStorage.token } });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};

@@ -1,4 +1,5 @@
 export interface Cards {
+    heartCount: number;
 	_id: string;
 	title: string;
 	subtitle: string;

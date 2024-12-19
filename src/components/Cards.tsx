@@ -7,22 +7,21 @@ import {
 } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../services/darkLightTheme";
-import { getAllCards } from "../services/cardsServices";
+import { getAllCards, updateCardLikes } from "../services/cardsServices"; // Ensure updateCardLikes exists
 import { Cards } from "../interface/Crards";
 import Pagination from "react-bootstrap/Pagination";
 import { FaHeart, FaTrashAlt } from "react-icons/fa";
 import DeleteModal from "./DeleteModal";
-import Loading from "./Loading";
 import { useUserContext } from "../contex/UserContext";
-import { errorMsg } from "../services/toastify";
+import { errorMsg, successMsg } from "../services/toastify";
 
 interface HomeProps {}
 
 const Home: FunctionComponent<HomeProps> = () => {
     const navigate: NavigateFunction = useNavigate();
-    const [searchTerm, setSearchTerm] = useState<string>("");
-    const { isAdmin, isLogedIn, isBusiness } = useUserContext();
+    const { isAdmin, isLogedIn } = useUserContext();
     const theme = useContext(ThemeContext);
+
     const [cards, setCards] = useState<Cards[]>([]);
     const [render, setRender] = useState<boolean>(false);
     const [show, setShow] = useState<boolean>(false);
@@ -31,79 +30,58 @@ const Home: FunctionComponent<HomeProps> = () => {
 
     // Fetch cards from the server
     useEffect(() => {
-        try {
-            getAllCards()
-                .then((res) => {
-                    setCards(res.reverse());
-                })
-                .catch();
-        } catch (error) {}
+        const fetchCards = async () => {
+            try {
+                const res = await getAllCards();
+                setCards(res.reverse());
+            } catch (error) {
+                errorMsg("Failed to fetch cards.");
+            }
+        };
+        fetchCards();
     }, [render]);
 
     const refresh = () => {
         setRender(!render);
     };
 
-    const onHide = useCallback(() => {
-        setShow(false);
-    }, []);
+    const onHide = useCallback(() => setShow(false), []);
+    const onShow = useCallback(() => setShow(true), []);
 
-    const onshow = useCallback(() => {
-        setShow(true);
-    }, []);
-
+    const handleLike = async (cardId: string) => {
+        try {
+            const updatedCards = cards.map((card) =>
+                card._id === cardId
+                    ? { ...card, likes: [...card.likes, "newLike"] } // Increment likes array
+                    : card
+            );
+            setCards(updatedCards);
+    
+            // Update on the server
+            await updateCardLikes(cardId);
+    
+            successMsg("You liked the card!");
+        } catch (error) {
+            errorMsg("Failed to like the card.");
+        }
+    };
     const indexOfLastCard = currentPage * cardsPerPage;
     const indexOfFirstCard = indexOfLastCard - cardsPerPage;
     const currentCards = cards.slice(indexOfFirstCard, indexOfLastCard);
 
     const totalPages = Math.ceil(cards.length / cardsPerPage);
 
-    const handlePageChange = (pageNumber: number) => {
-        setCurrentPage(pageNumber);
-    };
+    const handlePageChange = (pageNumber: number) => setCurrentPage(pageNumber);
 
-    const paginationItems = [];
-    for (let number = 1; number <= totalPages; number++) {
-        paginationItems.push(
-            <Pagination.Item
-                key={number}
-                active={number === currentPage}
-                onClick={() => handlePageChange(number)}>
-                {number}
-            </Pagination.Item>
-        );
-    }
-
-    // LikeButton component (local to Home)
-    const LikeButton = () => {
-        const [isLiked, setIsLiked] = useState(false);
-
-        const handleLike = () => {
-            if (!isLogedIn) {
-                errorMsg("You need to log in as a user"); 
-                return;
-            }
-            setIsLiked((prev) => !prev); // Toggle like state
-        };
-
-        return (
-            <button
-                onClick={handleLike}
-                className="likeBtn"
-                style={{
-                    backgroundColor: "transparent",
-                    border: "none",
-                    cursor: "pointer",
-                }}>
-                <FaHeart
-                    style={{
-                        color: isLiked ? "red" : "gray", // Toggle color
-                        fontSize: "20px",
-                    }}
-                />
-            </button>
-        );
-    };
+    const paginationItems = Array.from({ length: totalPages }, (_, index) => (
+        <Pagination.Item
+            key={index + 1}
+            active={index + 1 === currentPage}
+            onClick={() => handlePageChange(index + 1)}
+        >
+            {index + 1}
+        </Pagination.Item>
+    ));
 
     return (
         <main
@@ -111,20 +89,23 @@ const Home: FunctionComponent<HomeProps> = () => {
                 backgroundColor: theme.background,
                 color: theme.color,
                 minHeight: "100vh",
-            }}>
+            }}
+        >
             <div className="container">
                 <div className="row sm-auto">
                     {cards.length > 0 ? (
                         currentCards.map((card: Cards) => (
                             <div
                                 className="col-12 col-md-6 col-xl-4 my-3"
-                                key={card._id}>
+                                key={card._id}
+                            >
                                 <div
                                     className="card"
                                     style={{
                                         maxWidth: "24rem",
                                         height: "70vh",
-                                    }}>
+                                    }}
+                                >
                                     <div className="card-body">
                                         <img
                                             style={{
@@ -144,7 +125,7 @@ const Home: FunctionComponent<HomeProps> = () => {
                                     </div>
                                     <div className="card-text">
                                         <strong style={{ marginLeft: "5px" }}>
-                                            description:
+                                            Description:
                                         </strong>
                                         <p
                                             style={{
@@ -152,29 +133,50 @@ const Home: FunctionComponent<HomeProps> = () => {
                                                 textAlign: "justify",
                                                 fontSize: "10pt",
                                                 width: "19rem",
-                                            }}>
+                                            }}
+                                        >
                                             {card.description.length > 100
-                                                ? `${card.description.slice(0, 150)}...`
+                                                ? `${card.description.slice(0,150)}...`
                                                 : card.description}
                                         </p>
-                                        {/* TODO:don't display if logged out */}
-                                        <div className="card-footer d-flex justify-content-around">
-                                            <LikeButton />
-                                            {isAdmin && (
+                                        {/* Display footer only if logged in */}
+                                        {isLogedIn && (
+                                            <div className="card-footer d-flex justify-content-around">
+                                                {/* Like button */}
                                                 <button
-                                                    onClick={onshow}
-                                                    className="btn btn-danger"
-                                                    key={card._id}>
-                                                    <FaTrashAlt />
+                                                    className="likeBtn"
+                                                    style={{
+                                                        backgroundColor: "transparent",
+                                                        border: "none",
+                                                        color: card.likes.length > 0 ? "red" : "black", // Use length
+                                                    }}
+                                                    onClick={() =>
+                                                        handleLike(card._id)
+                                                    }
+                                                >
+                                                    <FaHeart /> {card.likes || 0}
                                                 </button>
-                                            )}
-                                            <DeleteModal
-                                                show={show}
-                                                onHide={onHide}
-                                                refresh={refresh}
-                                                productId={card._id}
-                                            />
-                                        </div>
+                                                {/* Show delete button only for admins */}
+                                                {isAdmin && (
+                                                    <>
+                                                        <button
+                                                            onClick={onShow}
+                                                            className="btn btn-danger"
+                                                        >
+                                                            <FaTrashAlt />
+                                                        </button>
+                                                        <DeleteModal
+                                                            show={show}
+                                                            onHide={onHide}
+                                                            refresh={refresh}
+                                                            productId={
+                                                                card._id
+                                                            }
+                                                        />
+                                                    </>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>

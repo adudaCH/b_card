@@ -37,7 +37,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/" element={<Cards />} />
-                    <Route path="/profile" element={<Profile />} />
+                    {/* <Route path="/profile" element={<Profile />} /> */}
                     <Route path="/fav-cards" element={<FavCards />} />
                     <Route path="*" element={<PageNotFound />} />
                 </Routes>
