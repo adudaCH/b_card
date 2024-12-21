@@ -1,5 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
-import { cardLikes } from "../services/cardsServices";
+import { cardLikes } from "../../services/cardsServices";
+
 
 
 interface LikeButtonProps {

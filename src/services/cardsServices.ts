@@ -112,10 +112,24 @@ export const deleteCardById = async (cardId: string) => {
     }
 };
 
+export async function userLikes(userId: string) {
+    try {
+
+        const response = await getAllCards();
+        const cardsData = response.data;
 
 
+        if (cardsData.length > 0) {
+            const userLikedCards = cardsData.filter((card: Cards) => card.likes?.includes(userId));
+            return userLikedCards;
+        }
 
-
+        return [];
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
+}
 
 
 export async function cardLikes(id: string) {
@@ -124,29 +138,6 @@ export async function cardLikes(id: string) {
 
     return cardData;
 };
-
-// export async function userLikes(userId: string) {
-//     try {
-
-//         const response = await getAllCards();
-//         const cardsData = response.data;
-
-
-//         if (cardsData.length > 0) {
-//             const userLikedCards = cardsData.filter((card: Cards) => card.likes?.includes(userId));
-//             return userLikedCards;
-//         }
-
-//         return [];
-//     } catch (error) {
-//         console.log(error);
-//         return [];
-//     }
-// }
-
-
-
-
 
 export function getCardById(id: string) {
     return axios.get(`${api}/${id}`)

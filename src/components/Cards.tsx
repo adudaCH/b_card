@@ -7,31 +7,45 @@ import {
 } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../services/darkLightTheme";
-import { getAllCards } from "../services/cardsServices"; // Ensure updateCardLikes exists
+import { getAllCards } from "../services/cardsServices";
 import { Cards } from "../interface/Crards";
 import Pagination from "react-bootstrap/Pagination";
 import { FaHeart, FaTrashAlt } from "react-icons/fa";
 import DeleteModal from "./DeleteModal";
 import { useUserContext } from "../contex/UserContext";
-import { errorMsg, successMsg } from "../services/toastify";
-import LikeButton from "./LikeButton";
+import { errorMsg } from "../services/toastify";
 import { userDetails } from "../services/userServices";
+import LikeButton from "./tools/LikeButton";
 
 interface HomeProps {}
 
 const Home: FunctionComponent<HomeProps> = () => {
     const navigate: NavigateFunction = useNavigate();
-    const { isAdmin, isLogedIn } = useUserContext();
+    const { isAdmin, isLogedIn, user } = useUserContext(); // Ensure `user` is available
     const theme = useContext(ThemeContext);
 
     const [cards, setCards] = useState<Cards[]>([]);
     const [render, setRender] = useState<boolean>(false);
-    const [show, setShow] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+    const [selectedCardId, setSelectedCardId] = useState<string | null>(null); // Track card for delete modal
     const cardsPerPage = 6;
-        useEffect(()=>{
-            userDetails()
-        })
+
+    // Fetch user details (if needed)
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                if (!user?._id) {
+                    throw new Error("User ID not found.");
+                }
+                const userData = await userDetails(user._id);
+                console.log("User Details:", userData); // Optional: Handle user details if required
+            } catch (error) {
+                errorMsg("Failed to fetch user details.");
+            }
+        };
+        if (isLogedIn) fetchUserDetails();
+    }, [isLogedIn, user?._id]);
 
     // Fetch cards from the server
     useEffect(() => {
@@ -50,26 +64,6 @@ const Home: FunctionComponent<HomeProps> = () => {
         setRender(!render);
     };
 
-    const onHide = useCallback(() => setShow(false), []);
-    const onShow = useCallback(() => setShow(true), []);
-
-    // const handleLike = async (cardId: string) => {
-    //     try {
-    //         const updatedCards = cards.map((card) =>
-    //             card._id === cardId
-    //                 ? { ...card, likes: [...card.likes, "newLike"] } // Increment likes array
-    //                 : card
-    //         );
-    //         setCards(updatedCards);
-    
-    //         // Update on the server
-    //         await updateCardLikes(cardId);
-    
-    //         successMsg("You liked the card!");
-    //     } catch (error) {
-    //         errorMsg("Failed to like the card.");
-    //     }
-    // };
     const indexOfLastCard = currentPage * cardsPerPage;
     const indexOfFirstCard = indexOfLastCard - cardsPerPage;
     const currentCards = cards.slice(indexOfFirstCard, indexOfLastCard);
@@ -89,7 +83,13 @@ const Home: FunctionComponent<HomeProps> = () => {
     ));
 
     return (
-        <main style={{ backgroundColor: theme.background, color: theme.color, minHeight: "100vh",}}>
+        <main
+            style={{
+                backgroundColor: theme.background,
+                color: theme.color,
+                minHeight: "100vh",
+            }}
+        >
             <div className="container">
                 <div className="row sm-auto">
                     {cards.length > 0 ? (
@@ -138,29 +138,26 @@ const Home: FunctionComponent<HomeProps> = () => {
                                                 ? `${card.description.slice(0,150)}...`
                                                 : card.description}
                                         </p>
-                                        {/* Display footer only if logged in */}
                                         {isLogedIn && (
                                             <div className="card-footer d-flex justify-content-around">
-                                                {/* Like button */}
-                                                <LikeButton cardId={card._id} userId={user._id} />
+                                                <LikeButton
+                                                    cardId={card._id}
+                                                    userId={user._id}
+                                                />
                                                 {isAdmin && (
-                                                    <>
-                                                        <button
-                                                            onClick={onShow}
-                                                            className="btn btn-danger"
-                                                        >
-                                                            <FaTrashAlt />
-                                                        </button>
-                                                        {/* TODO:make the modal work */}
-                                                        <DeleteModal
-                                                            show={show}
-                                                            onHide={onHide}
-                                                            refresh={refresh}
-                                                            productId={
+                                                    <button
+                                                        onClick={() => {
+                                                            setOpenDeleteModal(
+                                                                true
+                                                            );
+                                                            setSelectedCardId(
                                                                 card._id
-                                                            }
-                                                        />
-                                                    </>
+                                                            );
+                                                        }}
+                                                        className="btn btn-danger"
+                                                    >
+                                                        <FaTrashAlt />
+                                                    </button>
                                                 )}
                                             </div>
                                         )}
@@ -180,6 +177,12 @@ const Home: FunctionComponent<HomeProps> = () => {
                     </div>
                 )}
             </div>
+            {/* <DeleteModal
+                show={openDeleteModal}
+                onHide={() => setOpenDeleteModal(false)}
+                refresh={refresh}
+                productId={selectedCardId}
+            /> */}
         </main>
     );
 };

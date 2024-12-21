@@ -1,5 +1,6 @@
 import axios from "axios";
 import {User, UserLogin} from "../interface/User";
+import { JwtPayload } from "jwt-decode";
 const api: string = `${process.env.REACT_APP_API}/users` as string;
 
 const token = {
@@ -71,7 +72,12 @@ export const deleteUserById = async (userId: string) => {
 		console.log(error);
 	}
 };
-
+export interface CustomJwtPayload extends JwtPayload {
+    _id?: string;
+    isBusiness?: boolean;
+    isAdmin: boolean;
+    iat: number;
+}
 
 
 

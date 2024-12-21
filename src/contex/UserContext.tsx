@@ -3,6 +3,7 @@ import { User } from "../interface/User";
 
 
 interface UserContextType {
+    [x: string]: any;
 	auth: User | null;
 	setAuth: React.Dispatch<React.SetStateAction<User | null>>;
 	isLogedIn: boolean;
