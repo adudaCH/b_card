@@ -4,10 +4,10 @@ import useToken from "../customeHooks/useToken";
 import { Cards } from "../interface/Crards";
 import { getLikedCardById } from "../services/cardsServices";
 import { errorMsg } from "../services/toastify";
-import { handleLike_Cards } from "../handelFunctions/cards";
+import { handleLike_Cards, handleNvgCard } from "../handelFunctions/cards";
 import Loading from "./Loading";
 import { Link, useNavigate } from "react-router-dom";
-import { handleNvgCard } from "../handelFunctions/navigate";
+
 import LikeButton from "./tools/LikeButton";
 
 interface FavCardsProps {}
@@ -92,7 +92,6 @@ const FavCards: FunctionComponent<FavCardsProps> = () => {
                                             }}
                                         />
                                     </Link>
-
                                     <div className="card-body">
                                         <h5 className="card-title">
                                             {card.title}

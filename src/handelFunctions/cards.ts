@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Cards } from "../interface/Crards";
 import { updateLikeStatus } from "../services/cardsServices";
 
@@ -27,4 +28,10 @@ export const handleLike_Cards = (
 		return card;
 	});
 	cardsSetter(updatedCards);
+};
+
+export const handleNvgCard = (route: string, cardId: string): string=> {
+    const navigate = useNavigate();
+    navigate(route); 
+	return route.replace(":cardId", cardId);
 };

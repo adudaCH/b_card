@@ -114,10 +114,7 @@ export const deleteCardById = async (cardId: string) => {
 
 export async function userLikes(userId: string) {
     try {
-
-        const response = await getAllCards();
-        const cardsData = response.data;
-
+        const cardsData = await getAllCards(); 
 
         if (cardsData.length > 0) {
             const userLikedCards = cardsData.filter((card: Cards) => card.likes?.includes(userId));
@@ -130,6 +127,7 @@ export async function userLikes(userId: string) {
         return [];
     }
 }
+
 
 
 export async function cardLikes(id: string) {

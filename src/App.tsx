@@ -38,6 +38,7 @@ function App() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/" element={<Cards />} />
                     {/* <Route path="/profile" element={<Profile />} /> */}
+                    {/* <Route path="/card-details/:cardId" element={<CardDetails />} /> */}
                     <Route path="/fav-cards" element={<FavCards/>} />
                     <Route path="*" element={<PageNotFound />} />
                 </Routes>
