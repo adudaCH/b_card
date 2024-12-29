@@ -105,7 +105,11 @@ export const deleteCardById = async (cardId: string) => {
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            errorMsg(`Internet connection error: ${error.response?.data || error.message}`);
+            errorMsg(
+                `Internet connection error: ${
+                    error.response?.data || error.message
+                }`
+            );
         } else {
             errorMsg(`Unexpected error: ${error}`);
         }
@@ -114,10 +118,12 @@ export const deleteCardById = async (cardId: string) => {
 
 export async function userLikes(userId: string) {
     try {
-        const cardsData = await getAllCards(); 
+        const cardsData = await getAllCards();
 
         if (cardsData.length > 0) {
-            const userLikedCards = cardsData.filter((card: Cards) => card.likes?.includes(userId));
+            const userLikedCards = cardsData.filter((card: Cards) =>
+                card.likes?.includes(userId)
+            );
             return userLikedCards;
         }
 
@@ -128,22 +134,16 @@ export async function userLikes(userId: string) {
     }
 }
 
-
-
 export async function cardLikes(id: string) {
     let response = await getCardById(id);
     let cardData: string[] = response.data.likes;
 
     return cardData;
-};
-
-export function getCardById(id: string) {
-    return axios.get(`${api}/${id}`)
 }
 
-
-
-
+export function getCardById(id: string) {
+    return axios.get(`${api}/cards/${id}`);
+}
 
 // export async function like(id: string, userId: string) {
 //     try {

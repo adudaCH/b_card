@@ -33,19 +33,18 @@ const Home: FunctionComponent<HomeProps> = () => {
                 if (!auth) {
                     throw new Error("User ID not found.");
                 }
-                const userData = await userDetails("userId");
+                const userData = await userDetails("67718ac600b4d006b4364c34");
                 console.log("User Details:", userData); // Optional: Handle user details if required
             } catch (error) {
                 console.error("Error fetching user details:", error);
                 errorMsg("Failed to fetch user details.");
             }
         };
-    
+
         if (isLogedIn) {
             fetchUserDetails();
         }
     }, [auth, isLogedIn]);
-
 
     useEffect(() => {
         const fetchCards = async () => {
@@ -130,21 +129,29 @@ const Home: FunctionComponent<HomeProps> = () => {
                                             }}>
                                             {card.description.length > 100
                                                 ? `${card.description.slice(
-                                                      0,
-                                                      150
-                                                  )}...`
+                                                    0,
+                                                    150
+                                                )}...`
                                                 : card.description}
                                         </p>
                                         {isLogedIn && (
                                             <div className="card-footer d-flex justify-content-around">
                                                 {auth && (
-                                                    <LikeButton
-                                                        cardId={card._id}
-                                                        userId={
-                                                            auth._id as string
-                                                        }
-                                                    />
+                                                    <div>
+                                                        {/* TODO:fix alignment */}
+                                                        {/* TODO:fix adding likes*/}
+                                                        <LikeButton
+                                                            cardId={card._id}
+                                                            userId={
+                                                                auth._id as string
+                                                            }
+                                                        />
+                                                        <div>
+                                                            {card.likes.length}
+                                                        </div>
+                                                    </div>
                                                 )}
+
                                                 {isAdmin && (
                                                     <button
                                                         onClick={() => {
@@ -182,9 +189,11 @@ const Home: FunctionComponent<HomeProps> = () => {
                     show={openDeleteModal}
                     onHide={() => setOpenDeleteModal(false)}
                     refresh={refresh}
-                    productId={selectedCardId} onDelete={function (): void {
+                    productId={selectedCardId}
+                    onDelete={function (): void {
                         throw new Error("Function not implemented.");
-                    } }                />
+                    }}
+                />
             )}
         </main>
     );

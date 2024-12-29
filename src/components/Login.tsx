@@ -21,7 +21,7 @@ const Login: FunctionComponent<LoginProps> = () => {
     const { isAdmin, auth, setAuth, setIsAdmin, setIsBusiness, setIsLogedIn } =
         useUserContext();
     const { decodedToken } = useToken();
-    
+
     useEffect(() => {
         if (decodedToken && localStorage.token) {
             setIsLogedIn(true);
@@ -43,12 +43,10 @@ const Login: FunctionComponent<LoginProps> = () => {
                 })
                 .catch((err) => {
                     errorMsg("Failed to find user");
-                    setIsLoading(false)
+                    setIsLoading(false);
                     return;
                 });
     }, []);
-
-
 
     const validationSchema = yup.object({
         email: yup
@@ -82,10 +80,13 @@ const Login: FunctionComponent<LoginProps> = () => {
         },
     });
 
-        if (isLoading) return <Loading />;
+    // if (isLoading) return <Loading />;
     return (
         <main
-            style={{ backgroundColor: theme.background, color: theme.color, minHeight: "100vh",
+            style={{
+                backgroundColor: theme.background,
+                color: theme.color,
+                minHeight: "100vh",
             }}>
             <div className="d-flex justify-content-center align-items-center min-vh-100">
                 <div
@@ -154,7 +155,6 @@ const Login: FunctionComponent<LoginProps> = () => {
                 </div>
             </div>
         </main>
-
     );
 };
 

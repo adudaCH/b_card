@@ -9,7 +9,7 @@ interface DecodedToken {
 
 function useToken() {
     const token = localStorage.getItem("token");
-    const [decodedToken, setAfterDecode] = useState<any>({});
+    const [decodedToken, setAfterDecode] = useState<any>(null);
 
     useEffect(() => {
         const checkToken = () => {
@@ -40,7 +40,7 @@ function useToken() {
 
         window.addEventListener("storage", handleStorageChange);
         return () => {
-        window.removeEventListener("storage", handleStorageChange);
+            window.removeEventListener("storage", handleStorageChange);
         };
     }, [token]);
 

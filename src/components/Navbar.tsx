@@ -42,19 +42,37 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
     } = useUserContext();
     const theme = useContext(ThemeContext);
     const { decodedToken } = useToken();
-    const [user, setUser] = useState<{ name: { first: string; last: string } } | null>(null); 
+    const [user, setUser] = useState<{
+        name: { first: string; last: string };
+    } | null>(null);
+
+    // useEffect(() => {
+    //     const fetchUsers = async () => {
+    //         try {
+    //             const users: {
+    //                 _id: string;
+    //                 name: { first: string; last: string };
+    //             }[] = await getAllUsers();
+
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const users: { _id: string; name: { first: string; last: string } }[] = await getAllUsers();
-                const loggedInUser = users.find((u) => u._id === decodedToken?._id); // Find the logged-in user by ID
+                const users: {
+                    _id: string;
+                    name: { first: string; last: string };
+                }[] = await getAllUsers();
+
+                const loggedInUser = users.find(
+                    (u) => u._id === decodedToken?._id
+                ); // Find the logged-in user by ID
+                console.log("loggedInUser", loggedInUser);
                 setUser(loggedInUser || null); // Set the user state
             } catch (error) {
                 console.error("Failed to fetch users:", error);
             }
         };
-    
+        console.log(isLogedIn, decodedToken, "decodedToken", "isLogedIn");
         if (isLogedIn && decodedToken?._id) {
             fetchUsers();
         }
@@ -62,6 +80,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
 
     useEffect(() => {
         if (decodedToken) {
+            console.log("decodedToken", decodedToken);
             setAuth(decodedToken);
             setIsLogedIn(true);
             setIsAdmin(decodedToken.isAdmin);
@@ -80,6 +99,13 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
         localStorage.removeItem("token");
         navigate("/");
     };
+    const loginHandler = () => {
+        console.log("isLogedIn", isLogedIn);
+        if (isLogedIn) {
+        } else {
+            navigate("/login");
+        }
+    };
 
     return (
         <BootstrapNavbar
@@ -91,11 +117,9 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                 BCard
             </BootstrapNavbar.Brand>
 
-
             <BootstrapNavbar.Toggle aria-controls="navbar-nav" />
 
             <BootstrapNavbar.Collapse id="navbar-nav">
-        
                 <Nav className="me-auto">
                     <NavLink className={"nav-link"} to="/about">
                         About
@@ -138,44 +162,39 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                 {/* Icons */}
                 <Nav>
                     <div className="d-flex align-items-center justify-content-center">
-                    <Button
-                        style={{ color: theme.color }}
-                        className="navIcon "
-                        onClick={() => changeMode()}>
-                        <FaMoon className="navIcon" />
-                    </Button>
-                    <Button
-                        
-                        className="navIcon"
-                        onClick={() =>
-                            navigate(isLogedIn ? "/profile" : "/login")
-                        }> 
-                        {!isLogedIn ? (
-                            <FaUserCircle />
-                        ) : (
-                            <div className="userIcon d-flex justify-content-center align-items-center">
-                                {setDefaultImg(
-                                    user?.name?.first || "",
-                                    user?.name?.last || ""
-                                ).join("")}
-                            </div>
-                        )}
-                    </Button>
-                    <Button
-                        className="navIcon"
-                        onClick={() => {
-                            if (isLogedIn) {
-                                loggedOut();
-                            } else {
-                                navigate("/login");
-                            }
-                        }}>
-                        {isLogedIn ? (
-                            <GrLogout className="navIcon" />
-                        ) : (
-                            <GrLogin className="navIcon" />
-                        )}
-                    </Button>
+                        <Button
+                            style={{ color: theme.color }}
+                            className="navIcon "
+                            onClick={() => changeMode()}>
+                            <FaMoon className="navIcon" />
+                        </Button>
+                        <Button className="navIcon" onClick={loginHandler}>
+                            {!isLogedIn ? (
+                                <FaUserCircle />
+                            ) : (
+                                <div className="userIcon d-flex justify-content-center align-items-center">
+                                    {setDefaultImg(
+                                        user?.name?.first || "",
+                                        user?.name?.last || ""
+                                    ).join("")}
+                                </div>
+                            )}
+                        </Button>
+                        <Button
+                            className="navIcon"
+                            onClick={() => {
+                                if (isLogedIn) {
+                                    loggedOut();
+                                } else {
+                                    navigate("/login");
+                                }
+                            }}>
+                            {isLogedIn ? (
+                                <GrLogout className="navIcon" />
+                            ) : (
+                                <GrLogin className="navIcon" />
+                            )}
+                        </Button>
                     </div>
                 </Nav>
             </BootstrapNavbar.Collapse>
