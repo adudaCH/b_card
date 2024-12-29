@@ -4,7 +4,7 @@ import { ThemeContext } from "../services/darkLightTheme";
 import { getAllCards } from "../services/cardsServices";
 import { Cards } from "../interface/Crards";
 import Pagination from "react-bootstrap/Pagination";
-import { FaHeart, FaTrashAlt } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
 import DeleteModal from "./modals/DeleteModal";
 import { useUserContext } from "../contex/UserContext";
 import { errorMsg } from "../services/toastify";
@@ -135,18 +135,15 @@ const Home: FunctionComponent<HomeProps> = () => {
                                                 : card.description}
                                         </p>
                                         {isLogedIn && (
-                                            <div className="card-footer d-flex justify-content-around">
+                                            <div className="card-footer d-flex justify-content-start align-items-center">
                                                 {auth && (
-                                                    <div>
-                                                        {/* TODO:fix alignment */}
+                                                    <div className="d-flex align-items-start me-2"> 
                                                         {/* TODO:fix adding likes*/}
                                                         <LikeButton
                                                             cardId={card._id}
-                                                            userId={
-                                                                auth._id as string
-                                                            }
+                                                            userId={auth._id as string}
                                                         />
-                                                        <div>
+                                                        <div className="mx-2">
                                                             {card.likes.length}
                                                         </div>
                                                     </div>
@@ -162,7 +159,7 @@ const Home: FunctionComponent<HomeProps> = () => {
                                                                 card._id
                                                             );
                                                         }}
-                                                        className="btn btn-danger">
+                                                        className="btn me-2 justify-content-center align-items-end">
                                                         <FaTrashAlt />
                                                     </button>
                                                 )}

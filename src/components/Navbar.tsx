@@ -26,6 +26,7 @@ import { useUserContext } from "../contex/UserContext";
 import useToken from "../customeHooks/useToken";
 import { getAllUsers } from "../services/userServices";
 
+
 interface NavbarProps {
     changeMode: Function;
 }
@@ -46,14 +47,10 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
         name: { first: string; last: string };
     } | null>(null);
 
-    // useEffect(() => {
-    //     const fetchUsers = async () => {
-    //         try {
-    //             const users: {
-    //                 _id: string;
-    //                 name: { first: string; last: string };
-    //             }[] = await getAllUsers();
-
+    // TODO: activate the google thing
+    useEffect(()=>{
+        setDefaultImg((user?.name?.first || ""), (user?.name?.last || ""));
+    })
 
     useEffect(() => {
         const fetchUsers = async () => {

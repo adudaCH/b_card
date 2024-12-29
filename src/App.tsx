@@ -42,6 +42,7 @@ function App() {
                     <Route path="/like-button" element={<LikeButton cardId={""} userId={""} />} />
                     {/* <Route path="/profile" element={<Profile />} /> */}
                     {/* <Route path="/card-details/:cardId" element={<CardDetails />} /> */}
+                    
                     <Route path="/fav-cards" element={<FavCards />} />
                     <Route path="/my-cards" element={<MyCards />} />
                     <Route path="*" element={<PageNotFound />} />

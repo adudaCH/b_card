@@ -61,16 +61,16 @@ const About: FunctionComponent<AboutProps> = () => {
                     you share your story with the world.
                 </p>
             </div>
-            <footer className='text-center mt-5 py-3 border-top w-100'>
+            <footer className='text-center mt-5 py-3 border-top w-100 '>
 					<h2 className='mt-5'>Contact Us</h2>
-					<p className=' lead'>
+					<p>
 						Have questions or want to learn more? Feel free to reach out to us
 						at
 					</p>
-					<Link to='mailto:support@b_cards.com' className='text-primary'>
+					<Link to='mailto:support@b_cards.com' >
 						support@b_cards.com
 					</Link>
-					<p>&copy; {new Date().getFullYear()} bCards. All Rights Reserved.</p>
+					<p className="mt-2">&copy; {new Date().getFullYear()} bCards. All Rights Reserved.</p>
 				</footer>
         </main>
     );
