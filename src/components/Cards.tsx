@@ -1,17 +1,11 @@
-import {
-    FunctionComponent,
-    useCallback,
-    useContext,
-    useEffect,
-    useState,
-} from "react";
+import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../services/darkLightTheme";
 import { getAllCards } from "../services/cardsServices";
 import { Cards } from "../interface/Crards";
 import Pagination from "react-bootstrap/Pagination";
 import { FaHeart, FaTrashAlt } from "react-icons/fa";
-import DeleteModal from "./DeleteModal";
+import DeleteModal from "./modals/DeleteModal";
 import { useUserContext } from "../contex/UserContext";
 import { errorMsg } from "../services/toastify";
 import { userDetails } from "../services/userServices";
@@ -21,33 +15,38 @@ interface HomeProps {}
 
 const Home: FunctionComponent<HomeProps> = () => {
     const navigate: NavigateFunction = useNavigate();
-    const { isAdmin, isLogedIn, user } = useUserContext(); // Ensure `user` is available
+    const { isAdmin, isLogedIn, auth } = useUserContext(); // Ensure `user` is available
     const theme = useContext(ThemeContext);
 
     const [cards, setCards] = useState<Cards[]>([]);
     const [render, setRender] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-    const [selectedCardId, setSelectedCardId] = useState<string | null>(null); // Track card for delete modal
+    const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
     const cardsPerPage = 6;
 
+    console.log(auth);
     // Fetch user details (if needed)
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
-                if (!user?._id) {
+                if (!auth) {
                     throw new Error("User ID not found.");
                 }
-                const userData = await userDetails(user._id);
+                const userData = await userDetails("userId");
                 console.log("User Details:", userData); // Optional: Handle user details if required
             } catch (error) {
+                console.error("Error fetching user details:", error);
                 errorMsg("Failed to fetch user details.");
             }
         };
-        if (isLogedIn) fetchUserDetails();
-    }, [isLogedIn, user?._id]);
+    
+        if (isLogedIn) {
+            fetchUserDetails();
+        }
+    }, [auth, isLogedIn]);
 
-    // Fetch cards from the server
+
     useEffect(() => {
         const fetchCards = async () => {
             try {
@@ -76,8 +75,7 @@ const Home: FunctionComponent<HomeProps> = () => {
         <Pagination.Item
             key={index + 1}
             active={index + 1 === currentPage}
-            onClick={() => handlePageChange(index + 1)}
-        >
+            onClick={() => handlePageChange(index + 1)}>
             {index + 1}
         </Pagination.Item>
     ));
@@ -88,23 +86,20 @@ const Home: FunctionComponent<HomeProps> = () => {
                 backgroundColor: theme.background,
                 color: theme.color,
                 minHeight: "100vh",
-            }}
-        >
+            }}>
             <div className="container">
                 <div className="row sm-auto">
                     {cards.length > 0 ? (
                         currentCards.map((card: Cards) => (
                             <div
                                 className="col-12 col-md-6 col-xl-4 my-3"
-                                key={card._id}
-                            >
+                                key={card._id}>
                                 <div
                                     className="card"
                                     style={{
                                         maxWidth: "24rem",
                                         height: "70vh",
-                                    }}
-                                >
+                                    }}>
                                     <div className="card-body">
                                         <img
                                             style={{
@@ -132,18 +127,24 @@ const Home: FunctionComponent<HomeProps> = () => {
                                                 textAlign: "justify",
                                                 fontSize: "10pt",
                                                 width: "19rem",
-                                            }}
-                                        >
+                                            }}>
                                             {card.description.length > 100
-                                                ? `${card.description.slice(0,150)}...`
+                                                ? `${card.description.slice(
+                                                      0,
+                                                      150
+                                                  )}...`
                                                 : card.description}
                                         </p>
                                         {isLogedIn && (
                                             <div className="card-footer d-flex justify-content-around">
-                                                <LikeButton
-                                                    cardId={card._id}
-                                                    userId={user._id}
-                                                />
+                                                {auth && (
+                                                    <LikeButton
+                                                        cardId={card._id}
+                                                        userId={
+                                                            auth._id as string
+                                                        }
+                                                    />
+                                                )}
                                                 {isAdmin && (
                                                     <button
                                                         onClick={() => {
@@ -154,8 +155,7 @@ const Home: FunctionComponent<HomeProps> = () => {
                                                                 card._id
                                                             );
                                                         }}
-                                                        className="btn btn-danger"
-                                                    >
+                                                        className="btn btn-danger">
                                                         <FaTrashAlt />
                                                     </button>
                                                 )}
@@ -177,12 +177,15 @@ const Home: FunctionComponent<HomeProps> = () => {
                     </div>
                 )}
             </div>
-            {/* <DeleteModal
-                show={openDeleteModal}
-                onHide={() => setOpenDeleteModal(false)}
-                refresh={refresh}
-                productId={selectedCardId}
-            /> */}
+            {openDeleteModal && selectedCardId && (
+                <DeleteModal
+                    show={openDeleteModal}
+                    onHide={() => setOpenDeleteModal(false)}
+                    refresh={refresh}
+                    productId={selectedCardId} onDelete={function (): void {
+                        throw new Error("Function not implemented.");
+                    } }                />
+            )}
         </main>
     );
 };

@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Cards } from "../interface/Crards";
 import { updateLikeStatus } from "../services/cardsServices";
+import { User } from "../interface/User";
 
 export const handleLike_Cards = (
 	cardId: string,
@@ -30,8 +31,33 @@ export const handleLike_Cards = (
 	cardsSetter(updatedCards);
 };
 
-export const handleNvgCard = (route: string, cardId: string): string=> {
+export const HandleNvgCard = (route: string, cardId: string): string=> {
     const navigate = useNavigate();
     navigate(route); 
 	return route.replace(":cardId", cardId);
+};
+
+export const handleLikeToggle_MyCards = (
+	cardId: string,
+	user: User,
+	cards: Cards[],
+	cardsSetter: Function,
+) => {
+	if (!user || !user._id) return;
+
+	const updatedCards = cards.map((card: any) => {
+		if (card._id === cardId) {
+			const isLiked = card.likes.includes(user._id);
+			const updatedLikes = isLiked
+				? card.likes.filter((id: string) => id !== user._id)
+				: [...card.likes, user._id];
+
+			return {...card, likes: updatedLikes};
+		}
+		return card;
+	});
+	cardsSetter(updatedCards);
+	updateLikeStatus(cardId, user._id).catch((err) => {
+		console.log("Failed to update like status:", err);
+	});
 };

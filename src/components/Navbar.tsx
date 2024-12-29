@@ -104,7 +104,6 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                     <NavLink className={"nav-link"} to="/">
                         Cards
                     </NavLink>
-                    {/* {/* TODO:create the two components */}
                     {isLogedIn && (
                         <>
                             <NavLink className={"nav-link"} to="/fav-cards">
@@ -145,8 +144,8 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                         onClick={() => changeMode()}>
                         <FaMoon className="navIcon" />
                     </Button>
-                    {/* TODO: keep tying the google thing */}
                     <Button
+                        
                         className="navIcon"
                         onClick={() =>
                             navigate(isLogedIn ? "/profile" : "/login")

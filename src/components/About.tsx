@@ -1,5 +1,6 @@
 import { FunctionComponent, useContext } from "react";
 import { ThemeContext } from "../services/darkLightTheme";
+import { Link } from "react-router-dom";
 
 interface AboutProps {}
 
@@ -60,8 +61,21 @@ const About: FunctionComponent<AboutProps> = () => {
                     you share your story with the world.
                 </p>
             </div>
+            <footer className='text-center mt-5 py-3 border-top w-100'>
+					<h2 className='mt-5'>Contact Us</h2>
+					<p className=' lead'>
+						Have questions or want to learn more? Feel free to reach out to us
+						at
+					</p>
+					<Link to='mailto:support@b_cards.com' className='text-primary'>
+						support@b_cards.com
+					</Link>
+					<p>&copy; {new Date().getFullYear()} bCards. All Rights Reserved.</p>
+				</footer>
         </main>
     );
 };
+
+
 
 export default About;

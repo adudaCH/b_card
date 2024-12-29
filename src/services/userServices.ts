@@ -5,7 +5,7 @@ const api: string = `${process.env.REACT_APP_API}/users` as string;
 
 const token = {
 	"x-auth-token":
-		"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTBhZTc1OWRiMzgxM2E2NTAyZmMyZmMiLCJpc0J1c2luZXNzIjp0cnVlLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2OTg4NDI5NTJ9.En62ry5Gu9FMBAvxyltv0eRYhpJIJs_aW06QAtxXRck",
+		localStorage.getItem("token")
 };
 
 

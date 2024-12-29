@@ -1,50 +1,50 @@
-import {jwtDecode} from "jwt-decode";
-import {useEffect, useState} from "react";
+import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
 
 interface DecodedToken {
-	exp: number;
-	iat: number;
-	[key: string]: any;
+    exp: number;
+    iat: number;
+    [key: string]: any;
 }
 
 function useToken() {
-	const token = localStorage.getItem("token");
-	const [decodedToken, setAfterDecode] = useState<any>({});
+    const token = localStorage.getItem("token");
+    const [decodedToken, setAfterDecode] = useState<any>({});
 
-	useEffect(() => {
-		const checkToken = () => {
-			if (token) {
-				try {
-					const decoded: DecodedToken = jwtDecode(token);
-					const currentTime = Date.now() / 5000;
+    useEffect(() => {
+        const checkToken = () => {
+            if (token) {
+                try {
+                    const decoded: DecodedToken = jwtDecode(token);
+                    const currentTime = Date.now() / 5000;
 
-					if (decoded.exp < currentTime) {
-						localStorage.removeItem("token");
-						setAfterDecode(null);
-					} else {
-						setAfterDecode(decoded);
-					}
-				} catch (error) {
-					console.log("Invalid token:", error);
-					localStorage.removeItem("token");
-					setAfterDecode(null);
-				}
-			}
-		};
+                    if (decoded.exp < currentTime) {
+                        localStorage.removeItem("token");
+                        setAfterDecode(null);
+                    } else {
+                        setAfterDecode(decoded);
+                    }
+                } catch (error) {
+                    console.log("Invalid token:", error);
+                    localStorage.removeItem("token");
+                    setAfterDecode(null);
+                }
+            }
+        };
 
-		checkToken();
+        checkToken();
 
-		const handleStorageChange = () => {
-			checkToken();
-		};
+        const handleStorageChange = () => {
+            checkToken();
+        };
 
-		window.addEventListener("storage", handleStorageChange);
-		return () => {
-			window.removeEventListener("storage", handleStorageChange);
-		};
-	}, [token]);
+        window.addEventListener("storage", handleStorageChange);
+        return () => {
+        window.removeEventListener("storage", handleStorageChange);
+        };
+    }, [token]);
 
-	return {decodedToken};
+    return { decodedToken };
 }
 
 export default useToken;

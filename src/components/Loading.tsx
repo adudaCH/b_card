@@ -1,6 +1,7 @@
 import { FunctionComponent, useContext } from "react";
 import { ThemeContext } from "../services/darkLightTheme";
-import './CSS/LoadingComp.module.css';
+// import './CSS/LoadingComp.module.css';
+
 
 
 interface LoadingProps {}

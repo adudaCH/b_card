@@ -10,6 +10,7 @@ import { UserLogin } from "../interface/User";
 import { jwtDecode } from "jwt-decode";
 import { ThemeContext } from "../services/darkLightTheme";
 import useToken from "../customeHooks/useToken";
+import Loading from "./Loading";
 
 interface LoginProps {}
 
@@ -20,6 +21,7 @@ const Login: FunctionComponent<LoginProps> = () => {
     const { isAdmin, auth, setAuth, setIsAdmin, setIsBusiness, setIsLogedIn } =
         useUserContext();
     const { decodedToken } = useToken();
+    
     useEffect(() => {
         if (decodedToken && localStorage.token) {
             setIsLogedIn(true);
@@ -37,12 +39,16 @@ const Login: FunctionComponent<LoginProps> = () => {
                     setIsAdmin(decodedToken.isAdmin);
                     setIsBusiness(auth?.isBusiness as boolean);
                     setIsLogedIn(true);
+                    setIsLoading(false);
                 })
                 .catch((err) => {
                     errorMsg("Failed to find user");
+                    setIsLoading(false)
                     return;
                 });
     }, []);
+
+
 
     const validationSchema = yup.object({
         email: yup
@@ -75,6 +81,8 @@ const Login: FunctionComponent<LoginProps> = () => {
                 });
         },
     });
+
+        if (isLoading) return <Loading />;
     return (
         <main
             style={{ backgroundColor: theme.background, color: theme.color, minHeight: "100vh",
@@ -146,7 +154,7 @@ const Login: FunctionComponent<LoginProps> = () => {
                 </div>
             </div>
         </main>
-        // TODO: add a loading Animation after the user clicked "login"
+
     );
 };
 

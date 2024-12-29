@@ -4,7 +4,7 @@ import useToken from "../customeHooks/useToken";
 import { Cards } from "../interface/Crards";
 import { getLikedCardById } from "../services/cardsServices";
 import { errorMsg } from "../services/toastify";
-import { handleLike_Cards, handleNvgCard } from "../handelFunctions/cards";
+import { handleLike_Cards, HandleNvgCard } from "../handelFunctions/cards";
 import Loading from "./Loading";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -67,7 +67,7 @@ const FavCards: FunctionComponent<FavCardsProps> = () => {
                                     }}
                                     className="card w-100 rounded-lg overflow-hidden">
                                     <Link
-                                        to={handleNvgCard(
+                                        to={HandleNvgCard(
                                             "/card-details/:cardId",
                                             card._id as string
                                         )} // Generates a proper route string

@@ -11,6 +11,8 @@ import Register from "./components/Register";
 import { ToastContainer } from "react-toastify";
 import Cards from "./components/Cards";
 import Profile from "./components/Profile";
+import MyCards from "./components/MyCards";
+import LikeButton from "./components/tools/LikeButton";
 
 function App() {
     const [theme, setTheme] = useState(() => {
@@ -37,9 +39,11 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/" element={<Cards />} />
+                    <Route path="/like-button" element={<LikeButton cardId={""} userId={""} />} />
                     {/* <Route path="/profile" element={<Profile />} /> */}
                     {/* <Route path="/card-details/:cardId" element={<CardDetails />} /> */}
-                    <Route path="/fav-cards" element={<FavCards/>} />
+                    <Route path="/fav-cards" element={<FavCards />} />
+                    <Route path="/my-cards" element={<MyCards />} />
                     <Route path="*" element={<PageNotFound />} />
                 </Routes>
             </Router>

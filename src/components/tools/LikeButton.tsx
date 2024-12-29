@@ -1,10 +1,13 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { cardLikes } from "../../services/cardsServices";
+import { liked, useCardContext } from "../../contex/useCardContext";
 
 
 
 interface LikeButtonProps {
+
     cardId: string;
+
     userId: string;
 }
 
@@ -27,7 +30,7 @@ const LikeButton: FunctionComponent<LikeButtonProps> = ({ cardId, userId }) => {
 
         updateCardLikes(cardId, userId);
         setAsLike(!asLike);
-        await like(cardId, userId);
+        await liked(cardId, userId);
     };
 
     return (
@@ -49,10 +52,6 @@ const LikeButton: FunctionComponent<LikeButtonProps> = ({ cardId, userId }) => {
 
 export default LikeButton;
 
-function useCardContext(): { updateCardLikes: any; } {
-    throw new Error("Function not implemented.");
-}
-function like(cardId: string, userId: string) {
-    throw new Error("Function not implemented.");
-}
+
+
 
