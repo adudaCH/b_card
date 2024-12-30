@@ -17,13 +17,13 @@ const getUsers = {
 	headers: token,
 };
 
-// Login function
+
 export async function loginIn(login: UserLogin): Promise<any> {
 	const response = await axios.post(`${api}/login`, login);
 	return response;
 }
 
-// Fetch all users
+
 export async function getAllUsers(): Promise<any> {
 	try {
 		const response = await axios(getUsers);
@@ -34,7 +34,7 @@ export async function getAllUsers(): Promise<any> {
 	}
 }
 
-// Get specific user by ID
+
 export const getUserById = async (userId: User) => {
 	try {
 		const response = await axios.request({...getUsers, url: `${api}/${userId._id}`});
@@ -48,7 +48,7 @@ export function secondGetUserById(id:string){
 	return axios.get(`${api}/${id}`, {headers: {'x-auth-token': localStorage.token}})
 }
 
-// Register a new user
+
 export const registerNewUser = (user: User) => {
 	const response = axios.request({
 		...getUsers,
@@ -59,7 +59,7 @@ export const registerNewUser = (user: User) => {
 	return response;
 };
 
-// Delete specific user by ID
+
 export const deleteUserById = async (userId: string) => {
 	try {
 		const response = await axios.request({

@@ -58,7 +58,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
 
                 const loggedInUser = users.find(
                     (u) => u._id === decodedToken?._id
-                ); // Find the logged-in user by ID
+                ); 
                 console.log("loggedInUser", loggedInUser);
                 setUser(loggedInUser || null); // Set the user state
             } catch (error) {

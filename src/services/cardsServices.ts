@@ -144,22 +144,3 @@ export async function cardLikes(id: string) {
 export function getCardById(id: string) {
     return axios.get(`${api}/cards/${id}`);
 }
-
-// export async function like(id: string, userId: string) {
-//     try {
-
-//         let cardData: string[] = await cardLikes(id);
-
-//         if (cardData.includes(userId)) {
-//             cardData = cardData.filter((like) => like !== userId);
-//             await axios.patch(${api}/${id}, {likes: cardData}, { headers: { 'x-auth-token': localStorage.token } });
-//         } else {
-//             cardData.push(userId);
-//             await axios.patch(${api}/${id}, {
-//                 likes: cardData
-//             }, { headers: { 'x-auth-token': localStorage.token } });
-//         }
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };

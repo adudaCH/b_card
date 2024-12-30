@@ -7,15 +7,19 @@ interface LikeButtonProps {
     cardId: string;
 
     userId: string;
+    onClickHandler?: (cardId: any, userId: any) => void;
 }
 
-const LikeButton: FunctionComponent<LikeButtonProps> = ({ cardId, userId }) => {
+const LikeButton: FunctionComponent<LikeButtonProps> = ({
+    cardId,
+    userId,
+    onClickHandler,
+}) => {
     const [asLike, setAsLike] = useState<boolean>(false);
     // const { updateCardLikes } = useCardContext();
 
     useEffect(() => {
         const fetchLikes = async () => {
-            console.log(cardId, "cardId");
             const likes = await cardLikes(cardId);
 
             setAsLike(likes.includes(userId));
@@ -24,9 +28,9 @@ const LikeButton: FunctionComponent<LikeButtonProps> = ({ cardId, userId }) => {
     }, [cardId, userId]);
 
     const handleLikeClick = async () => {
-        // updateCardLikes(cardId, userId);
         setAsLike(!asLike);
         await liked(cardId, userId);
+        if (onClickHandler) onClickHandler(cardId, userId);
     };
 
     return (

@@ -21,8 +21,8 @@ export const cardsInitialValues: Cards = {
 		zip: 0,
 		_id: ""
 	},
-	heartCount: 0, // Default value
-	_id: '', // Default value
+	heartCount: 0,  
+	_id: '', 
 	likes: [],
 	bizNumber: 0,
 	user_id: "",

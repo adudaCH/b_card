@@ -20,14 +20,14 @@ const FavCards: FunctionComponent<FavCardsProps> = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!decodedToken._id) {
+        if (!decodedToken?._id) {
             setLoading(false);
             return;
         }
-        getLikedCardById(decodedToken._id)
+        getLikedCardById(decodedToken?._id)
             .then((res) => {
                 const liked = res.filter((card: any) =>
-                    card.likes.includes(decodedToken._id)
+                    card.likes.includes(decodedToken?._id)
                 );
                 setCards(liked);
                 setLoading(false);
@@ -70,8 +70,7 @@ const FavCards: FunctionComponent<FavCardsProps> = () => {
                                         to={HandleNvgCard(
                                             "/card-details/:cardId",
                                             card._id as string
-                                        )} // Generates a proper route string
-                                    >
+                                        )}>
                                         <img
                                             className="card-img-top"
                                             src={card.image.url}

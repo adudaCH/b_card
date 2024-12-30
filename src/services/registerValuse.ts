@@ -1,4 +1,4 @@
-// userInitialValues.ts
+
 
 export interface UserInitialValues {
     firstName: string;
@@ -14,7 +14,6 @@ export interface UserInitialValues {
     zipCode: string;
 }
 
-// Initial user values object
 export const userInitialValues = {
     name: { first: "", middle: "", last: "" },
     phone: "",

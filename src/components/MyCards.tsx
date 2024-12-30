@@ -66,15 +66,12 @@ const MyCards: FunctionComponent = () => {
                 color: theme.color,
                 minHeight: "100vh",
             }}>
-            <button className="btn btn-dark" onClick={() => navigate(-1)}>
-                Back
-            </button>
             <div className="container py-5">
                 <h2 className="lead display-5">My Cards</h2>
                 <hr className="border-light" />
                 <div className="w-100">
                     <button
-                        className="w-100 bg-opacity-50"
+                        className="w-25 bg-info ml-3 mt-2"
                         onClick={() => onShow()}>
                         Add Card
                     </button>
@@ -85,7 +82,7 @@ const MyCards: FunctionComponent = () => {
                             <div
                                 key={index}
                                 className="col-12 col-md-6 col-xl-4 my-3">
-                                <div className="card w-100 h-100 bg-dark text-light border-0 shadow-lg rounded-lg overflow-hidden">
+                                <div className="card w-100 h-100 bg-light text-dark border-0 shadow-lg rounded-lg overflow-hidden">
                                     <Link
                                         to={HandleNvgCard(
                                             "/card-detail",
@@ -119,7 +116,6 @@ const MyCards: FunctionComponent = () => {
                                         <p className="card-text text-start lead fw-bold">
                                             Phone: {card.phone}
                                         </p>
-                                        {/* Address */}
                                         <div className="text-start lead fw-bold">
                                             Address
                                             <hr className="w-25" />
@@ -169,7 +165,7 @@ const MyCards: FunctionComponent = () => {
                             </div>
                         ))
                     ) : (
-                        <div className="lilita-one-regular text-center my-5">Data was not found 👀</div>
+                        <div className="lilita-one-regular text-center my-5">no cards to show yet 🙄</div>
                     )}
                 </div>
                 <DeleteModal

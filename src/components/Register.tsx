@@ -222,7 +222,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
                                             border: "none",
                                             background: "transparent",
                                             padding: "0 10px",
-                                            zIndex: 10, // Ensures button stays above input
+                                            zIndex: 10, 
                                         }}>
                                         {showPassword ? (
                                             <FaEyeSlash />

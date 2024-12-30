@@ -10,6 +10,7 @@ import { useUserContext } from "../contex/UserContext";
 import { errorMsg } from "../services/toastify";
 import { userDetails } from "../services/userServices";
 import LikeButton from "./tools/LikeButton";
+import { useFavCardsContext } from "../contex/favCardsContext";
 
 interface HomeProps {}
 
@@ -19,12 +20,14 @@ const Home: FunctionComponent<HomeProps> = () => {
     const theme = useContext(ThemeContext);
     const [like, setLike] = useState<boolean>(false);
     const [cards, setCards] = useState<Cards[]>([]);
+    const [selectedCard, setCard] = useState<Cards | undefined>(undefined);
     const [render, setRender] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
     const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
+    const  favoriteCards = useFavCardsContext();
     const cardsPerPage = 6;
-
+// TODO: add the token to the arry of likes in the card and clone it and send to arry of likes
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
@@ -42,36 +45,6 @@ const Home: FunctionComponent<HomeProps> = () => {
         }
     }, [auth, isLogedIn]);
 
-    useEffect(() => {
-        // TODO: keep trying Fix adding likes
-        const fetchLikes = async () => {
-            try {
-                const likesData = await Promise.all(
-                    cards.map(async (card) => {
-                        const response = await fetch(`/api/cards/${card._id}/likes`);
-                        if (response.ok) {
-                            const data = await response.json();
-                            return { cardId: card._id, likes: data.likes.length };
-                        } else {
-                            console.error("Failed to fetch likes for card", card._id);
-                            return { cardId: card._id, likes: 0 };
-                        }
-                    })
-                );
-                // Update the likes state for each card
-                setCards((prevCards) =>
-                    prevCards.map((card) => {
-                        const cardLikes = likesData.find((like) => like.cardId === card._id);
-                        return { ...card, likes: cardLikes ? cardLikes.likes : card.likes };
-                    })
-                );
-            } catch (error) {
-                console.error("Error fetching likes:", error);
-            }
-        };
-
-        fetchLikes();
-    }, [cards]); 
 
     useEffect(() => {
         const fetchCards = async () => {
@@ -87,6 +60,14 @@ const Home: FunctionComponent<HomeProps> = () => {
 
     const refresh = () => {
         setRender(!render);
+    };
+
+    const likeClickHandler = (cardId: string | null, userId: string | null) => {
+        const likedCard = cards.find((card) => card._id === cardId);
+        const likeArray = likedCard?.likes;
+        likeArray?.push(userId as string);
+        setCard(likedCard);
+        console.log(likeArray, "likeArray");
     };
 
     const indexOfLastCard = currentPage * cardsPerPage;
@@ -171,9 +152,12 @@ const Home: FunctionComponent<HomeProps> = () => {
                                                             userId={
                                                                 auth._id as string
                                                             }
+                                                            onClickHandler={
+                                                                likeClickHandler
+                                                            }
                                                         />
                                                         <div className="mx-2">
-                                                            {card.likes.length}
+                                                            {card.likes?.length}
                                                         </div>
                                                     </div>
                                                 )}

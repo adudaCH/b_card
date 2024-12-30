@@ -46,7 +46,7 @@ const AddNewCardForm: FunctionComponent<AddNewCardFormProps> = ({refresh}) => {
 					.required("Alt text is required"),
 			}),
 			address: yup.object().shape({
-				state: yup.string().notRequired(), // Optional
+				state: yup.string().notRequired(),
 				country: yup.string().required("Country is required"),
 				city: yup.string().required("City is required"),
 				street: yup.string().required("Street is required"),

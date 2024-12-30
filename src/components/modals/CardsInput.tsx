@@ -1,6 +1,6 @@
 import {FunctionComponent} from "react";
 
-// props type for formik validation
+
 interface UserInputFormikPropsType {
 	name: string;
 	type: string;

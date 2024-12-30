@@ -21,7 +21,7 @@ export const handleLike_Cards = (
 				card.likes.push(userId);
 			}
 
-			// Update like status on the server
+		
 			updateLikeStatus(cardId, userId as string).catch((err) => {
 				console.log("Failed to update like status:", err);
 			});

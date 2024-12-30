@@ -2,10 +2,10 @@ import React from "react";
 import { Pagination } from "react-bootstrap";
 
 interface PaginationProps {
-    totalItems: number; // סך כל הפריטים
-    itemsPerPage: number; // כמות הפריטים בעמוד
-    currentPage: number; // העמוד הנוכחי
-    onPageChange: (page: number) => void; // פונקציה לשינוי עמוד
+    totalItems: number; 
+    itemsPerPage: number; 
+    currentPage: number; 
+    onPageChange: (page: number) => void; 
 }
 
 const CustomPagination: React.FC<PaginationProps> = ({
@@ -17,7 +17,7 @@ const CustomPagination: React.FC<PaginationProps> = ({
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     const getPaginationNumbers = () => {
-        const maxPagesToShow = 5; // מספר העמודים שיציג
+        const maxPagesToShow = 5; 
         let startPage = Math.max(currentPage - Math.floor(maxPagesToShow / 2), 1);
         let endPage = startPage + maxPagesToShow - 1;
 
