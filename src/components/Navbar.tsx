@@ -18,7 +18,6 @@ import {
     FaSun,
     FaArrowAltCircleRight,
 } from "react-icons/fa";
-import { setDefaultImg } from "../services/userImag";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { GrLogin, GrLogout } from "react-icons/gr";
 import { ThemeContext, themeMode } from "../services/darkLightTheme";
@@ -47,10 +46,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
         name: { first: string; last: string };
     } | null>(null);
 
-    // TODO: activate the google thing
-    useEffect(()=>{
-        setDefaultImg((user?.name?.first || ""), (user?.name?.last || ""));
-    })
+
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -170,10 +166,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                                 <FaUserCircle />
                             ) : (
                                 <div className="userIcon d-flex justify-content-center align-items-center">
-                                    {setDefaultImg(
-                                        user?.name?.first || "",
-                                        user?.name?.last || ""
-                                    ).join("")}
+                                <img style={{height:"26px"}} src="user.png" alt="user" />
                                 </div>
                             )}
                         </Button>

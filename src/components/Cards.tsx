@@ -15,9 +15,9 @@ interface HomeProps {}
 
 const Home: FunctionComponent<HomeProps> = () => {
     const navigate: NavigateFunction = useNavigate();
-    const { isAdmin, isLogedIn, auth } = useUserContext(); // Ensure `user` is available
+    const { isAdmin, isLogedIn, auth } = useUserContext();
     const theme = useContext(ThemeContext);
-
+    const [like, setLike] = useState<boolean>(false);
     const [cards, setCards] = useState<Cards[]>([]);
     const [render, setRender] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -25,16 +25,12 @@ const Home: FunctionComponent<HomeProps> = () => {
     const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
     const cardsPerPage = 6;
 
-    console.log(auth);
-    // Fetch user details (if needed)
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
                 if (!auth) {
                     throw new Error("User ID not found.");
                 }
-                const userData = await userDetails("67718ac600b4d006b4364c34");
-                console.log("User Details:", userData); // Optional: Handle user details if required
             } catch (error) {
                 console.error("Error fetching user details:", error);
                 errorMsg("Failed to fetch user details.");
@@ -45,6 +41,37 @@ const Home: FunctionComponent<HomeProps> = () => {
             fetchUserDetails();
         }
     }, [auth, isLogedIn]);
+
+    useEffect(() => {
+        // TODO: keep trying Fix adding likes
+        const fetchLikes = async () => {
+            try {
+                const likesData = await Promise.all(
+                    cards.map(async (card) => {
+                        const response = await fetch(`/api/cards/${card._id}/likes`);
+                        if (response.ok) {
+                            const data = await response.json();
+                            return { cardId: card._id, likes: data.likes.length };
+                        } else {
+                            console.error("Failed to fetch likes for card", card._id);
+                            return { cardId: card._id, likes: 0 };
+                        }
+                    })
+                );
+                // Update the likes state for each card
+                setCards((prevCards) =>
+                    prevCards.map((card) => {
+                        const cardLikes = likesData.find((like) => like.cardId === card._id);
+                        return { ...card, likes: cardLikes ? cardLikes.likes : card.likes };
+                    })
+                );
+            } catch (error) {
+                console.error("Error fetching likes:", error);
+            }
+        };
+
+        fetchLikes();
+    }, [cards]); 
 
     useEffect(() => {
         const fetchCards = async () => {
@@ -129,19 +156,21 @@ const Home: FunctionComponent<HomeProps> = () => {
                                             }}>
                                             {card.description.length > 100
                                                 ? `${card.description.slice(
-                                                    0,
-                                                    150
-                                                )}...`
+                                                      0,
+                                                      150
+                                                  )}...`
                                                 : card.description}
                                         </p>
                                         {isLogedIn && (
                                             <div className="card-footer d-flex justify-content-start align-items-center">
                                                 {auth && (
-                                                    <div className="d-flex align-items-start me-2"> 
+                                                    <div className="d-flex align-items-start me-2">
                                                         {/* TODO:fix adding likes*/}
                                                         <LikeButton
                                                             cardId={card._id}
-                                                            userId={auth._id as string}
+                                                            userId={
+                                                                auth._id as string
+                                                            }
                                                         />
                                                         <div className="mx-2">
                                                             {card.likes.length}

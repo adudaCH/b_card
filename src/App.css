@@ -27,11 +27,9 @@
 .userIcon {
     color: black;
     font-size:1.3rem;
-    width: 20px;
-    height: 20px;
+    width: 6px;
+    height: 6px;
     border-radius: 100%;
-    background-color:rgb(242, 187, 166);
-    padding: 16px;
     position: relative;
 }
 
