@@ -6,7 +6,7 @@ import {getCardById, putCard} from "../services/cardsServices";
 import {useParams} from "react-router-dom";
 import { ThemeContext } from "../services/darkLightTheme";
 import { cardsInitialValues } from "./modals/cardsInitialValues";
-import { successMsg } from "../services/toastify";
+import { errorMsg, successMsg } from "../services/toastify";
 import { Cards } from "../interface/Crards";
 
 interface UpdateCardFormProps {
@@ -91,10 +91,9 @@ const UpdateCardForm: FunctionComponent<UpdateCardFormProps> = ({refresh}) => {
 						successMsg(`${res.title} card is updated successfully`);
 					})
 					.catch((error: any) => {
-						console.error("Error updating card:", error);
+						errorMsg("Error updating card");
 					});
 			} catch (error) {
-				console.log(error);
 			}
 		},
 	});
