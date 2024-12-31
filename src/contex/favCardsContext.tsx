@@ -11,7 +11,7 @@ import FavCards from "../components/FavCards";
 
 interface FavCardsContextType {
     favoriteCards: Cards[] | null;
-    setFavoriteCards: (Cards: Cards) => void;
+    setFavoriteCards: React.Dispatch<React.SetStateAction<Cards[] | null>>;
 }
 
 const FavCardsContext = createContext<FavCardsContextType | null>(null);

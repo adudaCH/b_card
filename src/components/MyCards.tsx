@@ -32,7 +32,7 @@ const MyCards: FunctionComponent = () => {
         onHide();
         setRender(true);
     };
-
+    // TODO: Add a new card to the my cards page
     useEffect(() => {
         if (!decodedToken || !decodedToken._id) return;
         getMyCards(decodedToken._id)
@@ -67,7 +67,7 @@ const MyCards: FunctionComponent = () => {
                 minHeight: "100vh",
             }}>
             <div className="container py-5">
-                <h2 className="lead display-5">My Cards</h2>
+                <h2 className="lead poppins-regular" style={{fontSize:"1.9rem"}}>My Cards</h2>
                 <hr className="border-light" />
                 <div className="w-100">
                     <button

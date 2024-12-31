@@ -10,7 +10,7 @@ import { useUserContext } from "../contex/UserContext";
 import { errorMsg } from "../services/toastify";
 import { userDetails } from "../services/userServices";
 import LikeButton from "./tools/LikeButton";
-import { useFavCardsContext } from "../contex/favCardsContext";
+// import { useFavCardsContext } from "../contex/favCardsContext";
 
 interface HomeProps {}
 
@@ -25,9 +25,21 @@ const Home: FunctionComponent<HomeProps> = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
     const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
-    const  favoriteCards = useFavCardsContext();
+    // const { favoriteCards, setFavoriteCards } = useFavCardsContext();
     const cardsPerPage = 6;
 // TODO: add the token to the arry of likes in the card and clone it and send to arry of likes
+
+// useEffect(() => {
+//     if (favoriteCards) {
+//         setFavoriteCards(favoriteCards);
+//     } else {
+//         setFavoriteCards([]);
+//     }
+
+// },[favoriteCards]);
+
+
+
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {

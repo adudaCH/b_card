@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Cards } from "../interface/Crards";
-import { updateLikeStatus } from "../services/cardsServices";
+import { deleteCardById, updateLikeStatus } from "../services/cardsServices";
 import { User } from "../interface/User";
 
 export const handleLike_Cards = (
@@ -60,4 +60,12 @@ export const handleLikeToggle_MyCards = (
 	updateLikeStatus(cardId, user._id).catch((err) => {
 		console.log("Failed to update like status:", err);
 	});
+};
+
+export const handleDeleteCard_Cards = (id: string, cardsSetter: void) => {
+	deleteCardById(id)
+		.then(() => cardsSetter)
+		.catch((err) => {
+			console.log(err);
+		});
 };

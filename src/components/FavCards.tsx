@@ -47,13 +47,11 @@ const FavCards: FunctionComponent<FavCardsProps> = () => {
             style={{
                 backgroundColor: theme.background,
                 color: theme.color,
-                minHeight: "100vh",
+                minHeight: "110vh",
             }}>
-            <button className="btn btn-dark" onClick={() => navigate(-1)}>
-                Back
-            </button>
+            
             <div className="container-fluid">
-                <h2>Favorite Business Cards</h2>
+                <h2 className="poppins-regular">Favorite Business Cards</h2>
                 <div className="row">
                     {cards.map((card: Cards) => {
                         return (

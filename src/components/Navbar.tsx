@@ -100,6 +100,9 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
         }
     };
 
+
+    
+
     return (
         <BootstrapNavbar
             bg="dark"

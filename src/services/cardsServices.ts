@@ -144,3 +144,26 @@ export async function cardLikes(id: string) {
 export function getCardById(id: string) {
     return axios.get(`${api}/cards/${id}`);
 }
+
+export const putCard = async (cardId: string, newCard: Cards) => {
+	const token = localStorage.token;
+
+	if (!token) {
+		console.error("No authentication token found.");
+		return;
+	}
+
+	try {
+		const fullUrl = `${api}/cards/${cardId}`;
+		console.log("Making PUT request to:", fullUrl); // For debugging
+
+		const response = await axios.put(fullUrl, newCard, {
+			headers: {"x-auth-token": token},
+		});
+
+		return response.data;
+	} catch (error) {
+			console.error("Unexpected Error:", error);
+		}
+		throw new Error("Failed to update card.");
+	}
