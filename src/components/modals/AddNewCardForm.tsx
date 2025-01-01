@@ -1,76 +1,56 @@
-import {FormikValues, useFormik} from "formik";
-import {FunctionComponent} from "react";
+import { FormikValues, useFormik } from "formik";
+import { FunctionComponent } from "react";
 import * as yup from "yup";
-import {createNewCard} from "../../services/cardsServices";
+import { createCard, createNewCard } from "../../services/cardsServices";
 import CardsInput from "./CardsInput";
 import { Cards } from "../../interface/Crards";
-import { successMsg } from "../../services/toastify";
+import { errorMsg, successMsg } from "../../services/toastify";
 import { FaPlus } from "react-icons/fa";
 import { cardsInitialValues } from "./cardsInitialValues";
 
 interface AddNewCardFormProps {
-	refresh:Function
+	onHide: Function;
+
+	refresh: Function
 }
 
-const AddNewCardForm: FunctionComponent<AddNewCardFormProps> = ({refresh}) => {
-	const formik: FormikValues = useFormik<Cards>({
-			initialValues: cardsInitialValues,
+const AddNewCardForm: FunctionComponent<AddNewCardFormProps> = ({ refresh, onHide }) => {
+	const formik: FormikValues = useFormik({
+		initialValues: cardsInitialValues,
 		validationSchema: yup.object({
-			title: yup.string().min(2).max(256).required("Title is required"),
-			subtitle: yup.string().min(2).max(256).required("Subtitle is required"),
-			description: yup.string().min(2).max(1024).required("Description is required"),
-			phone: yup
-				.string()
-				.required("Phone number is required")
-				.min(9, "Phone number must be at least 9 digits")
-				.max(11, "Phone number must be at most 11 digits")
-				.matches(/^[0-9]+$/, "Phone number must contain only digits"),
+			title: yup.string().required().min(2),
+			subtitle: yup.string().required().min(2),
+			description: yup.string().required().min(2),
+			phone: yup.string().required("Phone number is required").matches(/^05\d{8}$/, "Phone number must be a valid Israeli number"),
 			email: yup
 				.string()
-				.email("Invalid email format")
-				.required("Email is required"),
-			web: yup
-				.string()
-				.url("Invalid URL format")
-				.min(14, "Web URL must be at least 14 characters"),
-			image: yup.object().shape({
-				url: yup
-					.string()
-					.url("Invalid image URL format")
-					.min(14, "Image URL must be at least 14 characters")
-					.required("Image URL is required"),
-				alt: yup
-					.string()
-					.min(2, "Alt text must be at least 2 characters")
-					.max(256, "Alt text must be at most 256 characters")
-					.required("Alt text is required"),
+				.required("Email is required")
+				.email("Must be a valid email address").matches(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, "email most be a valid email address"),
+			web: yup.string().min(14),
+			image: yup.object({
+				url: yup.string().url("Must be a valid URL"),
+				alt: yup.string(),
 			}),
-			address: yup.object().shape({
-				state: yup.string().notRequired(),
+			address: yup.object({
+				state: yup.string(),
 				country: yup.string().required("Country is required"),
 				city: yup.string().required("City is required"),
 				street: yup.string().required("Street is required"),
-				houseNumber: yup
-					.number()
-					.typeError("House number must be a number")
-					.required("House number is required"),
-				zip: yup
-					.number()
-					.typeError("ZIP must be a number")
-					.notRequired(),
+				houseNumber: yup.number().required("House number is required").min(0, "House number must be positive"),
+				zip: yup.number(),
 			}),
 		}),
-		onSubmit: async (values: Cards) => {
-			try {
-				await createNewCard(values);
-				successMsg(`${values.title} card is created successfully`);
-				refresh();
-			} catch (error) {
-				console.error("Error creating card:", error);
+		onSubmit: (values: Cards) => {
+			createCard(values).then(() => {
+				successMsg("Your business card as been added successfuly now everyone can see it :)");
+				onHide()
 			}
-		},
-	});
-	
+			).catch(() => errorMsg('oops something went wrong try again')
+			)
+		}
+
+	})
+
 	return (
 		<div className='container mt-5'>
 			<form

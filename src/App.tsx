@@ -14,6 +14,7 @@ import Profile from "./components/Profile";
 import MyCards from "./components/MyCards";
 import LikeButton from "./components/tools/LikeButton";
 import CardDetails from "./components/CardDetails";
+import { CardProvider } from "./contex/useCardContext";
 
 function App() {
     const [theme, setTheme] = useState(() => {
@@ -33,22 +34,26 @@ function App() {
     return (
         <ThemeContext.Provider value={theme ? themeMode.dark : themeMode.light}>
             <ToastContainer />
-            <Router>
-                <Navbar changeMode={toggleTheme} />
-                <Routes>
-                    <Route path="/about" element={<About />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/" element={<Cards />} />
-                    <Route path="/like-button" element={<LikeButton cardId={""} userId={""} />} />
-                    {/* <Route path="/profile" element={<Profile />} /> */}
-                    <Route path="/card-details/:cardId" element={<CardDetails />} />
-                    {/* TODO: fix the component below */}
-                    <Route path="/fav-cards" element={<FavCards />} />
-                    <Route path="/my-cards" element={<MyCards />} />
-                    <Route path="*" element={<PageNotFound />} />
-                </Routes>
-            </Router>
+            <CardProvider>
+
+
+                <Router>
+                    <Navbar changeMode={toggleTheme} />
+                    <Routes>
+                        <Route path="/about" element={<About />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/" element={<Cards />} />
+                        <Route path="/like-button" element={<LikeButton cardId={""} userId={""} />} />
+                        {/* <Route path="/profile" element={<Profile />} /> */}
+                        <Route path="/card-details/:cardId" element={<CardDetails />} />
+                        {/* TODO: fix the component below */}
+                        <Route path="/fav-cards" element={<FavCards />} />
+                        <Route path="/my-cards" element={<MyCards />} />
+                        <Route path="*" element={<PageNotFound />} />
+                    </Routes>
+                </Router>
+            </CardProvider>
         </ThemeContext.Provider>
     );
 }

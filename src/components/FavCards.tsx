@@ -2,58 +2,59 @@ import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../services/darkLightTheme";
 import useToken from "../customeHooks/useToken";
 import { Cards } from "../interface/Crards";
-import { getLikedCardById } from "../services/cardsServices";
+import { getLikedCardById, userLikes } from "../services/cardsServices";
 import { errorMsg } from "../services/toastify";
 import { handleLike_Cards, HandleNvgCard } from "../handelFunctions/cards";
 import Loading from "./Loading";
 import { Link, useNavigate } from "react-router-dom";
 
 import LikeButton from "./tools/LikeButton";
+import { useUser } from "../customeHooks/useUser";
 
-interface FavCardsProps {}
+interface FavCardsProps { }
 
 const FavCards: FunctionComponent<FavCardsProps> = () => {
     const [cards, setCards] = useState<Cards[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const { decodedToken } = useToken();
+    let { user } = useUser()
     const theme = useContext(ThemeContext);
     const navigate = useNavigate();
 
+
+
+
+
+
+
     useEffect(() => {
-        if (!decodedToken?._id) {
-            setLoading(false);
-            return;
-        }
-        getLikedCardById(decodedToken?._id)
-            .then((res) => {
-                const liked = res.filter((card: any) =>
-                    card.likes.includes(decodedToken?._id)
-                );
-                setCards(liked);
-                setLoading(false);
-            })
-            .catch((err) => {
-                errorMsg("Failed to fetch cards...");
-                setLoading(false);
-            });
-    }, [decodedToken]);
+        const fetchLikedCards = async () => {
+            const liked: Cards[] = await userLikes(user?._id as string);
+            setCards(liked.reverse());
+            setTimeout(() => {
+                if (liked.length == 0) {
+                    setLoading(false)
+                }
+            }, 3000)
 
-    if (loading) {
-        return <Loading />;
-    }
+        };
+        fetchLikedCards();
+    }, [user?._id]);
 
+
+    if (loading) return <Loading />;
     return (
         <main
             style={{
                 backgroundColor: theme.background,
                 color: theme.color,
-                minHeight: "110vh",
+                minHeight: "100vh",
             }}>
-            
-            <div className="container-fluid">
-                <h2 className="poppins-regular">Favorite Business Cards</h2>
+
+            <div className="container">
+                <h2 className="poppins-regular text-center pt-3">Favorite Business Cards</h2>
                 <div className="row">
-                    {cards.map((card: Cards) => {
+                    {cards.length > 0 && cards.map((card: Cards) => {
+                        loading && setLoading(false)
                         return (
                             <div
                                 key={card._id}
@@ -64,31 +65,30 @@ const FavCards: FunctionComponent<FavCardsProps> = () => {
                                         color: theme.color,
                                     }}
                                     className="card w-100 rounded-lg overflow-hidden">
-                                    <Link
-                                        to={HandleNvgCard(
-                                            "/card-details/:cardId",
-                                            card._id as string
-                                        )}>
-                                        <img
-                                            className="card-img-top"
-                                            src={card.image.url}
-                                            alt={card.image.alt}
-                                            style={{
-                                                objectFit: "cover",
-                                                height: "300px",
-                                                transition:
-                                                    "transform 0.3s ease",
-                                            }}
-                                            onMouseOver={(e) => {
-                                                e.currentTarget.style.transform =
-                                                    "scale(1.1)";
-                                            }}
-                                            onMouseOut={(e) => {
-                                                e.currentTarget.style.transform =
-                                                    "scale(1)";
-                                            }}
-                                        />
-                                    </Link>
+
+                                    <img
+                                        className="card-img-top"
+                                        src={card.image.url}
+                                        alt={card.image.alt}
+                                        onError={(e) => {
+                                            e.currentTarget.src = '/images/defaultBusinessImage.jpg'
+                                        }}
+                                        style={{
+                                            objectFit: "cover",
+                                            height: "300px",
+                                            transition:
+                                                "transform 0.3s ease",
+                                        }}
+                                        onMouseOver={(e) => {
+                                            e.currentTarget.style.transform =
+                                                "scale(1.1)";
+                                        }}
+                                        onMouseOut={(e) => {
+                                            e.currentTarget.style.transform =
+                                                "scale(1)";
+                                        }}
+                                    />
+
                                     <div className="card-body">
                                         <h5 className="card-title">
                                             {card.title}
@@ -115,31 +115,29 @@ const FavCards: FunctionComponent<FavCardsProps> = () => {
                                                         handleLike_Cards(
                                                             card._id as string,
                                                             cards,
-                                                            decodedToken._id as string,
+                                                            user?._id as string,
                                                             setCards
                                                         )
                                                     }
-                                                    className={`${
-                                                        card.likes?.includes(
-                                                            decodedToken._id
-                                                        )
-                                                            ? "text-danger"
-                                                            : "text-light"
-                                                    } fs-5 rounded-5`}>
+                                                    className={`${card.likes?.includes(
+                                                        user?._id as string
+                                                    )
+                                                        ? "text-danger"
+                                                        : "text-light"
+                                                        } fs-5 rounded-5`}>
                                                     <LikeButton
-                                                        cardId={card._id}
+                                                        cardId={card._id as string}
                                                         userId={
-                                                            decodedToken._id
+                                                            user?._id as string
                                                         }
                                                     />
                                                     <sub
-                                                        className={`${
-                                                            card.likes?.includes(
-                                                                decodedToken._id
-                                                            )
-                                                                ? "text-danger"
-                                                                : "text-light"
-                                                        } mx-1 fs-5`}>
+                                                        className={`${card.likes?.includes(
+                                                            user?._id as string
+                                                        )
+                                                            ? "text-danger"
+                                                            : "text-light"
+                                                            } mx-1 fs-5`}>
                                                         {card.likes?.length}
                                                     </sub>
                                                 </button>

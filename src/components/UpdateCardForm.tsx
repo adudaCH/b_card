@@ -1,9 +1,9 @@
-import {FormikValues, useFormik} from "formik";
-import {FunctionComponent, useContext, useEffect, useState} from "react";
+import { FormikValues, useFormik } from "formik";
+import { FunctionComponent, useContext, useEffect, useState } from "react";
 import * as yup from "yup";
 import CardsInput from "./modals/CardsInput";
-import {getCardById, putCard} from "../services/cardsServices";
-import {useParams} from "react-router-dom";
+import { getCardById, putCard } from "../services/cardsServices";
+import { useParams } from "react-router-dom";
 import { ThemeContext } from "../services/darkLightTheme";
 import { cardsInitialValues } from "./modals/cardsInitialValues";
 import { errorMsg, successMsg } from "../services/toastify";
@@ -13,9 +13,9 @@ interface UpdateCardFormProps {
 	refresh: () => void;
 }
 
-const UpdateCardForm: FunctionComponent<UpdateCardFormProps> = ({refresh}) => {
+const UpdateCardForm: FunctionComponent<UpdateCardFormProps> = ({ refresh }) => {
 	const [card, setCard] = useState<Cards>(cardsInitialValues);
-	const {cardId} = useParams<{cardId: string}>();
+	const { cardId } = useParams<{ cardId: string }>();
 	const theme = useContext(ThemeContext);
 
 
@@ -50,7 +50,6 @@ const UpdateCardForm: FunctionComponent<UpdateCardFormProps> = ({refresh}) => {
 				zip: card.address.zip,
 				_id: ""
 			},
-			heartCount: 0,
 			_id: "",
 			bizNumber: 0,
 			likes: [],
@@ -101,7 +100,7 @@ const UpdateCardForm: FunctionComponent<UpdateCardFormProps> = ({refresh}) => {
 	return (
 		<div className='container'>
 			<form
-				style={{backgroundColor: theme.background, color: theme.color}}
+				style={{ backgroundColor: theme.background, color: theme.color }}
 				onSubmit={formik.handleSubmit}
 				className=' card p-4 shadow-lg border rounded-4'
 			>

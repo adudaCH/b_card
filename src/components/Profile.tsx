@@ -16,7 +16,7 @@ import { Button } from "react-bootstrap";
 import { useUserContext } from "../contex/UserContext";
 import { FaPenFancy, FaTrashAlt } from "react-icons/fa";
 
-interface ProfileProps {}
+interface ProfileProps { }
 // TODO: see what is up with the profile
 const Profile: FunctionComponent<ProfileProps> = () => {
     const [user, setUser] = useState<any>({});
@@ -41,16 +41,16 @@ const Profile: FunctionComponent<ProfileProps> = () => {
         setRender(!render);
     };
 
-    useEffect(()=>{
-        if (decodedToken._id){
-            getUserById(decodedToken._id).then((res)=>{
+    useEffect(() => {
+        if (decodedToken._id) {
+            getUserById(decodedToken._id).then((res) => {
                 setIsLoading(false);
                 setUser(res);
-            }).catch((err)=>{
+            }).catch((err) => {
                 console.warn("2. Failed to fetch user data:", err)
                 setIsLoading(false)
             });
-        } else{
+        } else {
             console.warn("bla bla")
         }
     })
@@ -66,8 +66,8 @@ const Profile: FunctionComponent<ProfileProps> = () => {
     //                 setIsLoading(false);
     //             });
     //     } else {
-	// 		console.log("blaaaa");
-			
+    // 		console.log("blaaaa");
+
     //     }
     // }, [decodedToken._id, render]);
 
@@ -95,7 +95,7 @@ const Profile: FunctionComponent<ProfileProps> = () => {
             };
             await patchUserBusiness(user._id, updatedUserData, user);
 
-            const updatedUser: User = await getUserById(decodedToken._id);
+            const updatedUser: User = await getUserById(decodedToken._id).then();
             setUser(updatedUser as User);
         } catch (error) {
             console.error("Error updating data:", error);

@@ -1,63 +1,55 @@
 import { FaPenFancy, FaTrashAlt } from "react-icons/fa";
 import AddNewCardModal from "./modals/AddNewCardModal";
 import DeleteModal from "./modals/DeleteModal";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { Cards } from "../interface/Crards";
 import { FunctionComponent, useContext, useEffect, useState } from "react";
-import { getMyCards } from "../services/cardsServices";
+import { deleteCard, getMyCards } from "../services/cardsServices";
 import useToken from "../customeHooks/useToken";
 import { ThemeContext } from "../services/darkLightTheme";
 import Loading from "./Loading";
 import { HandleNvgCard } from "../handelFunctions/cards";
 import LikeButton from "./tools/LikeButton";
+import { useMyCards } from "../customeHooks/useMyCards";
+import { successMsg } from "../services/toastify";
+
 
 const MyCards: FunctionComponent = () => {
     const theme = useContext(ThemeContext);
-    const navigate = useNavigate();
     const { decodedToken } = useToken();
-    const [render, setRender] = useState<boolean>(false);
-    const [cards, setCards] = useState<Cards[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
-    const [showAddModal, setShowAddModal] = useState<boolean>(false);
+    const [openAddModal, setOpenAddModal] = useState<boolean>(false);
+    const [openEditModal, setOpenEditModal] = useState<boolean>(false);
+    let [flag, setFlag] = useState<boolean>(false);
+    let [cardId, setCardId] = useState<string>('');
+    const navigate: NavigateFunction = useNavigate()
+
+    let handleAddProduct = () => {
+        setOpenAddModal(true);
+    };
+
+    let handleEditProduct = () => {
+        setOpenEditModal(true);
+    };
     const [cardToDelete, setCardToDelete] = useState<string>("");
 
-    const onHideDeleteModal = () => setShowDeleteModal(false);
-    const onShowDeleteModal = () => setShowDeleteModal(true);
-    const onHide = () => setShowAddModal(false);
-    const onShow = () => setShowAddModal(true);
 
-    const refresh = () => {
-        onHideDeleteModal();
-        onHide();
-        setRender(true);
+    let refresh = () => {
+        setFlag(!flag)
     };
     // TODO: Add a new card to the my cards page
-    useEffect(() => {
-        if (!decodedToken || !decodedToken._id) return;
-        getMyCards(decodedToken._id)
-            .then((res: Cards[]) => {
-                setCards(
-                    res.reverse().map((card: Cards) => ({
-                        ...card,
-                        likes: card.likes || [],
-                    }))
-                );
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.error(err);
-                setLoading(false);
-            });
-    }, [decodedToken, render]);
+
+    let { cards, isLoading } = useMyCards(refresh)
 
     const handleDeleteCard_Cards = (cardId: string) => {
-        // Example: Delete card logic here
-        setCards((prev) => prev.filter((card) => card._id !== cardId));
-        setShowDeleteModal(false);
+        if (window.confirm("This card would be DELETED permanently!!. do you want to Delete this card?")) {
+            deleteCard(cardId).then(() => {
+                successMsg("Your Card as been DELETED successfuly");
+                refresh()
+            }).catch((err) => console.log(err))
+        }
     };
 
-    if (loading) return <Loading />;
+    if (isLoading) return <Loading />;
 
     return (
         <main
@@ -66,116 +58,93 @@ const MyCards: FunctionComponent = () => {
                 color: theme.color,
                 minHeight: "100vh",
             }}>
-            <div className="container py-5">
-                <h2 className="lead poppins-regular" style={{fontSize:"1.9rem"}}>My Cards</h2>
+            <div className="container py-5 text-center">
+                <h2 className="lead poppins-regular" style={{ fontSize: "1.9rem" }}>My Cards</h2>
                 <hr className="border-light" />
                 <div className="w-100">
                     <button
                         className="w-25 bg-info ml-3 mt-2"
-                        onClick={() => onShow()}>
+                        onClick={() => handleAddProduct()}>
                         Add Card
                     </button>
                 </div>
-                <div className="row">
-                    {cards.length > 0 ? (
-                        cards.map((card: Cards, index: number) => (
-                            <div
-                                key={index}
-                                className="col-12 col-md-6 col-xl-4 my-3">
-                                <div className="card w-100 h-100 bg-light text-dark border-0 shadow-lg rounded-lg overflow-hidden">
-                                    <Link
-                                        to={HandleNvgCard(
-                                            "/card-detail",
-                                            card._id
-                                        )}>
+                <div className="container">
+                    <div className="row sm-auto">
+                        {cards.length > 0 ? (
+                            cards.map((card: Cards, index: number) => (
+                                <div
+                                    key={index}
+                                    className="col-12 col-md-6 col-xl-4 my-3">
+                                    <div className="card">
+
+
                                         <img
-                                            className="card-img-top"
+                                            className="img-card-top"
                                             src={
                                                 card.image?.url ||
-                                                "default-image-url.jpg"
+                                                '/images/defaultBusinessImage.jpg'
                                             }
                                             alt={
                                                 card.image?.alt || "Card Image"
                                             }
-                                            style={{
-                                                objectFit: "cover",
-                                                height: "300px",
-                                                transition:
-                                                    "transform 0.3s ease",
+
+                                            onError={(e) => {
+                                                e.currentTarget.src = '/images/defaultBusinessImage.jpg'
                                             }}
                                         />
-                                    </Link>
-                                    <div className="card-body">
-                                        <h5 className="card-title">
-                                            {card.title}
-                                        </h5>
-                                        <p className="card-subtitle text-center mb-2 text-light-emphasis">
-                                            {card.subtitle}
-                                        </p>
-                                        <hr />
-                                        <p className="card-text text-start lead fw-bold">
-                                            Phone: {card.phone}
-                                        </p>
-                                        <div className="text-start lead fw-bold">
-                                            Address
-                                            <hr className="w-25" />
-                                            <span>{card.address.state}</span>,{" "}
-                                            <span>{card.address.city}</span>
-                                            <p>
-                                                {card.address.street},{" "}
-                                                <span>
-                                                    {card.address.houseNumber}
-                                                </span>
+
+                                        <div className="card-body">
+                                            <h5 className="card-title">
+                                                {card.title}
+                                            </h5>
+                                            <p className="card-subtitle text-center mb-2 text-light-emphasis">
+                                                {card.subtitle}
                                             </p>
-                                        </div>
-                                        <hr />
-                                        <p className="card-subtitle text-center mb-2 text-light lead">
-                                            {card.description}
-                                        </p>
-                                        <hr />
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            <LikeButton
-                                                cardId={card._id}
-                                                userId={decodedToken._id}
-                                            />
-                                            <div className="mt-3 d-flex justify-content-around">
-                                                <Link
-                                                    to={HandleNvgCard(
-                                                        "/card-detail",
-                                                        card._id
-                                                    )}>
-                                                    <button className="mx-3 text-warning">
-                                                        <FaPenFancy />
+                                            <hr />
+                                            <p className="card-text text-start lead fw-bold">
+                                                Phone: {card.phone}
+                                            </p>
+                                            <div className="text-start lead fw-bold">
+                                                Address:
+                                                <hr className="w-25" />
+                                                <span>{card.address.state}</span>,{" "}
+                                                <span>{card.address.city}</span>
+                                                <p>
+                                                    {card.address.street},{" "}
+                                                    <span>
+                                                        {card.address.houseNumber}
+                                                    </span>
+                                                </p>
+                                            </div>
+                                            <hr />
+                                            <div className="d-flex justify-content-between align-items-center">
+                                                <LikeButton
+                                                    cardId={card._id as string}
+                                                    userId={decodedToken._id}
+                                                />
+                                                <div className="mt-3 d-flex justify-content-around">
+
+                                                    <button
+                                                        className="text-danger"
+                                                        onClick={() => {
+                                                            handleDeleteCard_Cards(card._id as string)
+
+                                                        }}>
+                                                        <FaTrashAlt />
                                                     </button>
-                                                </Link>
-                                                <button
-                                                    className="text-danger"
-                                                    onClick={() => {
-                                                        onShowDeleteModal();
-                                                        setCardToDelete(
-                                                            card._id
-                                                        );
-                                                    }}>
-                                                    <FaTrashAlt />
-                                                </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))
-                    ) : (
-                        <div className="lilita-one-regular text-center my-5">no cards to show yet 🙄</div>
-                    )}
+                            ))
+                        ) : (
+                            <div className="lilita-one-regular text-center my-5">no cards to show yet 🙄</div>
+                        )}
+                    </div>
                 </div>
-                <DeleteModal
-                    show={showDeleteModal}
-                    onHide={onHideDeleteModal}
-                    onDelete={() => handleDeleteCard_Cards(cardToDelete as string)} refresh={refresh} productId={""}                />
                 <AddNewCardModal
-                    show={showAddModal}
-                    refresh={refresh}
-                    onHide={onHide}
+                    onHide={() => setOpenAddModal(false)} refresh={refresh} show={openAddModal}
                 />
             </div>
         </main>
