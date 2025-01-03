@@ -58,14 +58,12 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
 
                 const loggedInUser = users.find(
                     (u) => u._id === decodedToken?._id
-                ); 
-                console.log("loggedInUser", loggedInUser);
+                );
                 setUser(loggedInUser || null); // Set the user state
             } catch (error) {
                 console.error("Failed to fetch users:", error);
             }
         };
-        console.log(isLogedIn, decodedToken, "decodedToken", "isLogedIn");
         if (isLogedIn && decodedToken?._id) {
             fetchUsers();
         }
@@ -73,7 +71,6 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
 
     useEffect(() => {
         if (decodedToken) {
-            console.log("decodedToken", decodedToken);
             setAuth(decodedToken);
             setIsLogedIn(true);
             setIsAdmin(decodedToken.isAdmin);
@@ -101,16 +98,18 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
     };
 
 
-    
+
 
     return (
         <BootstrapNavbar
             bg="dark"
-            variant="dark"
             expand="lg"
-            className="px-3 navi">
-            <BootstrapNavbar.Brand className="antonFont" href="/home">
-                BCard
+            className="navbar navi navbar-dark ">
+            <BootstrapNavbar.Brand className="antonFont">
+                <NavLink className={"nav-link"} to="/">
+                    BCard
+                </NavLink>
+
             </BootstrapNavbar.Brand>
 
             <BootstrapNavbar.Toggle aria-controls="navbar-nav" />
@@ -119,10 +118,6 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                 <Nav className="me-auto">
                     <NavLink className={"nav-link"} to="/about">
                         About
-                    </NavLink>
-
-                    <NavLink className={"nav-link"} to="/">
-                        Cards
                     </NavLink>
                     {isLogedIn && (
                         <>
@@ -169,7 +164,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ changeMode }) => {
                                 <FaUserCircle />
                             ) : (
                                 <div className="userIcon d-flex justify-content-center align-items-center">
-                                <img style={{height:"26px"}} src="user.png" alt="user" />
+                                    <img style={{ height: "26px" }} src="user.png" alt="user" />
                                 </div>
                             )}
                         </Button>

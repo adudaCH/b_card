@@ -2,22 +2,19 @@ import React from "react";
 import { Pagination } from "react-bootstrap";
 
 interface PaginationProps {
-    totalItems: number; 
-    itemsPerPage: number; 
-    currentPage: number; 
-    onPageChange: (page: number) => void; 
+    currentPage: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
+    maxPagesToShow?: number;  // אפשרות להגדיר כמה דפים להציג במקסימום
 }
 
 const CustomPagination: React.FC<PaginationProps> = ({
-    totalItems,
-    itemsPerPage,
     currentPage,
+    totalPages,
     onPageChange,
+    maxPagesToShow = 5,
 }) => {
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-
     const getPaginationNumbers = () => {
-        const maxPagesToShow = 5; 
         let startPage = Math.max(currentPage - Math.floor(maxPagesToShow / 2), 1);
         let endPage = startPage + maxPagesToShow - 1;
 
@@ -29,29 +26,23 @@ const CustomPagination: React.FC<PaginationProps> = ({
         return Array.from({ length: endPage - startPage + 1 }, (_, index) => startPage + index);
     };
 
-    const handlePageChange = (page: number) => {
-        if (page >= 1 && page <= totalPages) {
-            onPageChange(page);
-        }
-    };
-
     return (
-        <Pagination className="pagesNav">
+        <Pagination>
             <Pagination.Prev
-                onClick={() => handlePageChange(currentPage - 1)}
+                onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}
             />
             {getPaginationNumbers().map((page) => (
                 <Pagination.Item
                     key={page}
                     active={page === currentPage}
-                    onClick={() => handlePageChange(page)}
+                    onClick={() => onPageChange(page)}
                 >
                     {page}
                 </Pagination.Item>
             ))}
             <Pagination.Next
-                onClick={() => handlePageChange(currentPage + 1)}
+                onClick={() => onPageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
             />
         </Pagination>

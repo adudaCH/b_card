@@ -8,11 +8,13 @@ import { FaTrashAlt } from "react-icons/fa";
 import DeleteModal from "./modals/DeleteModal";
 import { useUserContext } from "../contex/UserContext";
 import { errorMsg } from "../services/toastify";
-import { userDetails } from "../services/userServices";
+import { getUserDetails } from "../services/userServices";
 import LikeButton from "./tools/LikeButton";
+import CustomPagination from "./tools/CustomPagination";
+import { useUser } from "../customeHooks/useUser";
 // import { useFavCardsContext } from "../contex/favCardsContext";
 
-interface HomeProps {}
+interface HomeProps { }
 
 const Home: FunctionComponent<HomeProps> = () => {
     const navigate: NavigateFunction = useNavigate();
@@ -27,17 +29,17 @@ const Home: FunctionComponent<HomeProps> = () => {
     const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
     // const { favoriteCards, setFavoriteCards } = useFavCardsContext();
     const cardsPerPage = 6;
-// TODO: add the token to the arry of likes in the card and clone it and send to arry of likes
+    // TODO: add the token to the arry of likes in the card and clone it and send to arry of likes
 
-// useEffect(() => {
-//     if (favoriteCards) {
-//         setFavoriteCards(favoriteCards);
-//     } else {
-//         setFavoriteCards([]);
-//     }
+    // useEffect(() => {
+    //     if (favoriteCards) {
+    //         setFavoriteCards(favoriteCards);
+    //     } else {
+    //         setFavoriteCards([]);
+    //     }
 
-// },[favoriteCards]);
-
+    // },[favoriteCards]);
+    let { user } = useUser()
 
 
     useEffect(() => {
@@ -74,13 +76,6 @@ const Home: FunctionComponent<HomeProps> = () => {
         setRender(!render);
     };
 
-    const likeClickHandler = (cardId: string | null, userId: string | null) => {
-        const likedCard = cards.find((card) => card._id === cardId);
-        const likeArray = likedCard?.likes;
-        likeArray?.push(userId as string);
-        setCard(likedCard);
-        console.log(likeArray, "likeArray");
-    };
 
     const indexOfLastCard = currentPage * cardsPerPage;
     const indexOfFirstCard = indexOfLastCard - cardsPerPage;
@@ -90,15 +85,6 @@ const Home: FunctionComponent<HomeProps> = () => {
 
     const handlePageChange = (pageNumber: number) => setCurrentPage(pageNumber);
 
-    const paginationItems = Array.from({ length: totalPages }, (_, index) => (
-        <Pagination.Item
-            key={index + 1}
-            active={index + 1 === currentPage}
-            onClick={() => handlePageChange(index + 1)}>
-            {index + 1}
-        </Pagination.Item>
-    ));
-
     return (
         <main
             style={{
@@ -107,6 +93,8 @@ const Home: FunctionComponent<HomeProps> = () => {
                 minHeight: "100vh",
             }}>
             <div className="container">
+                <h1 className="text-center
+                pt-3">Cards</h1>
                 <div className="row sm-auto">
                     {cards.length > 0 ? (
                         currentCards.map((card: Cards) => (
@@ -115,19 +103,15 @@ const Home: FunctionComponent<HomeProps> = () => {
                                 key={card._id}>
                                 <div
                                     className="card"
-                                    style={{
-                                        maxWidth: "24rem",
-                                        height: "70vh",
-                                    }}>
+                                >
                                     <div className="card-body">
                                         <img
-                                            style={{
-                                                height: "150px",
-                                                width: "200px",
-                                            }}
                                             className="img-card-top"
                                             src={card.image.url}
                                             alt={card.image.alt}
+                                            onError={(e) => {
+                                                e.currentTarget.src = '/images/defaultBusinessImage.jpg'
+                                            }}
                                         />
                                     </div>
                                     <div className="card-title text-center">
@@ -149,9 +133,9 @@ const Home: FunctionComponent<HomeProps> = () => {
                                             }}>
                                             {card.description.length > 100
                                                 ? `${card.description.slice(
-                                                      0,
-                                                      150
-                                                  )}...`
+                                                    0,
+                                                    150
+                                                )}...`
                                                 : card.description}
                                         </p>
                                         {isLogedIn && (
@@ -159,14 +143,8 @@ const Home: FunctionComponent<HomeProps> = () => {
                                                 {auth && (
                                                     <div className="d-flex align-items-start me-2">
                                                         {/* TODO:fix adding likes*/}
-                                                        <LikeButton
-                                                            cardId={card._id}
-                                                            userId={
-                                                                auth._id as string
-                                                            }
-                                                            onClickHandler={
-                                                                likeClickHandler
-                                                            }
+                                                        <LikeButton cardId={card._id as string} userId={user?._id as string}
+
                                                         />
                                                         <div className="mx-2">
                                                             {card.likes?.length}
@@ -181,7 +159,7 @@ const Home: FunctionComponent<HomeProps> = () => {
                                                                 true
                                                             );
                                                             setSelectedCardId(
-                                                                card._id
+                                                                card._id as string
                                                             );
                                                         }}
                                                         className="btn me-2 justify-content-center align-items-end">
@@ -202,7 +180,11 @@ const Home: FunctionComponent<HomeProps> = () => {
                 </div>
                 {cards.length > 0 && (
                     <div className="d-flex justify-content-center my-3">
-                        <Pagination>{paginationItems}</Pagination>
+                        <CustomPagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={handlePageChange}
+                        />
                     </div>
                 )}
             </div>

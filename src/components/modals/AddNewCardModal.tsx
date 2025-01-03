@@ -1,4 +1,4 @@
-import {FunctionComponent} from "react";
+import { FunctionComponent } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import AddNewCardForm from "./AddNewCardForm";
@@ -32,7 +32,7 @@ const AddNewCardModal: FunctionComponent<AddNewCardModalProps> = ({
 					<Modal.Title className=' text-light display-6'>Add CARD</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<AddNewCardForm refresh={() => refresh()} />
+					<AddNewCardForm onHide={() => onHide()} refresh={() => refresh()} />
 				</Modal.Body>
 				<Modal.Footer>
 					<Button

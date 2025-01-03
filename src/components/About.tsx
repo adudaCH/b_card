@@ -2,6 +2,7 @@ import { FunctionComponent, useContext } from "react";
 import { ThemeContext } from "../services/darkLightTheme";
 import { Link } from "react-router-dom";
 
+
 interface AboutProps {}
 
 const About: FunctionComponent<AboutProps> = () => {

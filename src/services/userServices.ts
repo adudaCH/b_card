@@ -1,6 +1,6 @@
 import axios from "axios";
-import {User, UserLogin} from "../interface/User";
-import { JwtPayload } from "jwt-decode";
+import { User, UserLogin } from "../interface/User";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 const api: string = `${process.env.REACT_APP_API}/users` as string;
 
 const token = {
@@ -34,25 +34,20 @@ export async function getAllUsers(): Promise<any> {
 	}
 }
 
+export function getUserById(id: string) {
+	return axios.get(`${api}/${id}`, { headers: { 'x-auth-token': localStorage.token } })
+}
 
-export const getUserById = async (userId: User) => {
-	try {
-		const response = await axios.request({...getUsers, url: `${api}/${userId._id}`});
-		return response.data;
-	} catch (error) {
-		console.log(error);
-	}
-};
 
-export function secondGetUserById(id:string){
-	return axios.get(`${api}/${id}`, {headers: {'x-auth-token': localStorage.token}})
+export function secondGetUserById(id: string) {
+	return axios.get(`${api}/${id}`, { headers: { 'x-auth-token': localStorage.token } })
 }
 
 
 export const registerNewUser = (user: User) => {
 	const response = axios.request({
 		...getUsers,
-		headers: {"Content-Type": "application/json"},
+		headers: { "Content-Type": "application/json" },
 		method: "post",
 		data: user,
 	});
@@ -73,22 +68,35 @@ export const deleteUserById = async (userId: string) => {
 	}
 };
 export interface CustomJwtPayload extends JwtPayload {
-    _id?: string;
-    isBusiness?: boolean;
-    isAdmin: boolean;
-    iat: number;
+	_id?: string;
+	isBusiness?: boolean;
+	isAdmin: boolean;
+	iat: number;
 }
 
 
-
-export async function userDetails(userId: string) {
+export async function getUserDetails(token: string) {
 	try {
-		let res = await secondGetUserById(userId)
-		let user:User = res.data
-		console.log(user);
-		
+		const decoded = jwtDecode<CustomJwtPayload>(token);
+		const userId = decoded._id || "Id Not Found";
+		return await getUserById(userId);
 	} catch (error) {
-		console.log(error);
-		
+		console.error(`Error: ${error}`);
+		return null;
 	}
 }
+
+export const putUserData = async (userId: string, data: User) => {
+	try {
+		const response = await axios.request({
+			...getUsers,
+			url: `${api}/${userId}`,
+			method: "put",
+			data: data,
+		});
+
+		return response.data;
+	} catch (error) {
+		console.log(error);
+	}
+};

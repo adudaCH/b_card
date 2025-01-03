@@ -106,8 +106,7 @@ export const deleteCardById = async (cardId: string) => {
     } catch (error) {
         if (axios.isAxiosError(error)) {
             errorMsg(
-                `Internet connection error: ${
-                    error.response?.data || error.message
+                `Internet connection error: ${error.response?.data || error.message
                 }`
             );
         } else {
@@ -141,29 +140,72 @@ export async function cardLikes(id: string) {
     return cardData;
 }
 
+
+export async function like(id: string, userId: string) {
+    try {
+
+        let cardData: string[] = await cardLikes(id);
+
+        if (cardData.includes(userId)) {
+            cardData = cardData.filter((like) => like !== userId);
+            await axios.patch(`${api}/cards/${id}`, {
+                likes: cardData
+            }, { headers: { 'x-auth-token': localStorage.token } });
+        } else {
+            cardData.push(userId);
+            await axios.patch(`${api}/cards/${id}`, {
+                likes: cardData
+            }, { headers: { 'x-auth-token': localStorage.token } });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export function getCardById(id: string) {
     return axios.get(`${api}/cards/${id}`);
 }
 
 export const putCard = async (cardId: string, newCard: Cards) => {
-	const token = localStorage.token;
+    const token = localStorage.token;
 
-	if (!token) {
-		console.error("No authentication token found.");
-		return;
-	}
+    if (!token) {
+        console.error("No authentication token found.");
+        return;
+    }
 
-	try {
-		const fullUrl = `${api}/cards/${cardId}`;
-		console.log("Making PUT request to:", fullUrl); // For debugging
+    try {
+        const fullUrl = `${api}/cards/${cardId}`;
+        console.log("Making PUT request to:", fullUrl); // For debugging
 
-		const response = await axios.put(fullUrl, newCard, {
-			headers: {"x-auth-token": token},
-		});
+        const response = await axios.put(fullUrl, newCard, {
+            headers: { "x-auth-token": token },
+        });
 
-		return response.data;
-	} catch (error) {
-			console.error("Unexpected Error:", error);
-		}
-		throw new Error("Failed to update card.");
-	}
+        return response.data;
+    } catch (error) {
+        console.error("Unexpected Error:", error);
+    }
+    throw new Error("Failed to update card.");
+}
+
+
+// get my cards
+
+export function getAllMyCards() {
+    return axios.get(`${api}/cards/my-cards`, { headers: { 'x-auth-token': localStorage.token } })
+}
+
+export function createCard(card: Cards) {
+    console.log(card);
+
+    return axios.post(`${api}/cards`, card, { headers: { 'x-auth-token': localStorage.token } })
+}
+
+
+export function deleteCard(cardId: string) {
+    return axios.delete(`${api}/cards/${cardId}`, { headers: { 'x-auth-token': localStorage.token } })
+}
+
+
+
