@@ -12,6 +12,7 @@ import { getUserDetails } from "../services/userServices";
 import LikeButton from "./tools/LikeButton";
 import CustomPagination from "./tools/CustomPagination";
 import { useUser } from "../customeHooks/useUser";
+import Loading from "./Loading";
 // import { useFavCardsContext } from "../contex/favCardsContext";
 
 interface HomeProps { }
@@ -20,44 +21,33 @@ const Home: FunctionComponent<HomeProps> = () => {
     const navigate: NavigateFunction = useNavigate();
     const { isAdmin, isLogedIn, auth } = useUserContext();
     const theme = useContext(ThemeContext);
-    const [like, setLike] = useState<boolean>(false);
     const [cards, setCards] = useState<Cards[]>([]);
-    const [selectedCard, setCard] = useState<Cards | undefined>(undefined);
     const [render, setRender] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
     const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
+    let [loading, setLoading] = useState<boolean>(true)
     // const { favoriteCards, setFavoriteCards } = useFavCardsContext();
     const cardsPerPage = 6;
-    // TODO: add the token to the arry of likes in the card and clone it and send to arry of likes
-
-    // useEffect(() => {
-    //     if (favoriteCards) {
-    //         setFavoriteCards(favoriteCards);
-    //     } else {
-    //         setFavoriteCards([]);
-    //     }
-
-    // },[favoriteCards]);
     let { user } = useUser()
 
 
-    useEffect(() => {
-        const fetchUserDetails = async () => {
-            try {
-                if (!auth) {
-                    throw new Error("User ID not found.");
-                }
-            } catch (error) {
-                console.error("Error fetching user details:", error);
-                errorMsg("Failed to fetch user details.");
-            }
-        };
-
-        if (isLogedIn) {
-            fetchUserDetails();
-        }
-    }, [auth, isLogedIn]);
+    /*   useEffect(() => {
+          const fetchUserDetails = async () => {
+              try {
+                  if (!auth) {
+                      throw new Error("User ID not found.");
+                  }
+              } catch (error) {
+                  console.error("Error fetching user details:", error);
+                  errorMsg("Failed to fetch user details.");
+              }
+          };
+  
+          if (isLogedIn) {
+              fetchUserDetails();
+          }
+      }, [auth, isLogedIn]); */
 
 
     useEffect(() => {
@@ -65,6 +55,7 @@ const Home: FunctionComponent<HomeProps> = () => {
             try {
                 const res = await getAllCards();
                 setCards(res.reverse());
+                setLoading(false)
             } catch (error) {
                 errorMsg("Failed to fetch cards.");
             }
@@ -84,6 +75,9 @@ const Home: FunctionComponent<HomeProps> = () => {
     const totalPages = Math.ceil(cards.length / cardsPerPage);
 
     const handlePageChange = (pageNumber: number) => setCurrentPage(pageNumber);
+
+
+    if (loading) return <Loading />;
 
     return (
         <main
@@ -179,7 +173,7 @@ const Home: FunctionComponent<HomeProps> = () => {
                     )}
                 </div>
                 {cards.length > 0 && (
-                    <div className="d-flex justify-content-center my-3">
+                    <div className="d-flex justify-content-center mt-3">
                         <CustomPagination
                             currentPage={currentPage}
                             totalPages={totalPages}

@@ -85,3 +85,18 @@ export async function getUserDetails(token: string) {
 		return null;
 	}
 }
+
+export const putUserData = async (userId: string, data: User) => {
+	try {
+		const response = await axios.request({
+			...getUsers,
+			url: `${api}/${userId}`,
+			method: "put",
+			data: data,
+		});
+
+		return response.data;
+	} catch (error) {
+		console.log(error);
+	}
+};

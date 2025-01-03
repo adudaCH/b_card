@@ -197,8 +197,6 @@ export function getAllMyCards() {
 }
 
 export function createCard(card: Cards) {
-    console.log(card);
-
     return axios.post(`${api}/cards`, card, { headers: { 'x-auth-token': localStorage.token } })
 }
 
@@ -206,6 +204,9 @@ export function createCard(card: Cards) {
 export function deleteCard(cardId: string) {
     return axios.delete(`${api}/cards/${cardId}`, { headers: { 'x-auth-token': localStorage.token } })
 }
+
+
+
 
 
 
