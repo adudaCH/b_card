@@ -1,31 +1,57 @@
+<<<<<<< HEAD
 import { useState, useEffect, FunctionComponent, useContext, SetStateAction } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { putUserData, getUserById, deleteUserById } from "../services/userServices";
 import Loading from "./Loading";
 import * as yup from "yup";
 import { FormikValues, useFormik } from "formik";
+=======
+import {useState, useEffect, FunctionComponent, useContext, SetStateAction} from "react";
+import {useNavigate, useParams} from "react-router-dom";
+import {putUserData, getUserById, deleteUserById} from "../services/userServices";
+import Loading from "./Loading";
+import * as yup from "yup";
+import {FormikValues, useFormik} from "formik";
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 import { User } from "../interface/User";
 import { errorMsg, successMsg } from "../services/toastify";
 import { ThemeContext } from "../services/darkLightTheme";
 import { Button } from "react-bootstrap";
 import DeleteModal from "./modals/DeleteModal";
 import CardsInput from "./modals/CardsInput";
+<<<<<<< HEAD
 interface EditUserProps { }
 
 const EditUser: FunctionComponent<EditUserProps> = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const { userId } = useParams<string>();
+=======
+interface EditUserProps {}
+
+const EditUser: FunctionComponent<EditUserProps> = () => {
+	const [isLoading, setIsLoading] = useState(true);
+	const {userId} = useParams<string>();
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 	const theme = useContext(ThemeContext);
 	const navigate = useNavigate();
 	const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 	const [cardToDelete, setCardToDelete] = useState<SetStateAction<string>>("");
 	const [user, setUser] = useState<User>({
+<<<<<<< HEAD
 		name: { first: "", middle: "", last: "" },
 		phone: "",
 		email: "",
 		password: "",
 		address: { state: "", city: "", country: "", street: "", houseNumber: 0, zip: 0 },
 		image: { imageUrl: "", alt: "" },
+=======
+		name: {first: "", middle: "", last: ""},
+		phone: "",
+		email: "",
+		password: "",
+		address: {state: "", city: "", country: "", street: "", houseNumber: 0, zip: 0},
+		image: {imageUrl: "", alt: ""},
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 		isBusiness: false,
 	});
 
@@ -35,6 +61,7 @@ const EditUser: FunctionComponent<EditUserProps> = () => {
 	const formik: FormikValues = useFormik<User>({
 		enableReinitialize: true,
 		initialValues: {
+<<<<<<< HEAD
 			name: {
 				first: user.name.first,
 				middle: user.name.middle,
@@ -54,6 +81,27 @@ const EditUser: FunctionComponent<EditUserProps> = () => {
 			password: "",
 			isBusiness: false
 		},
+=======
+            name: {
+                first: user.name.first,
+                middle: user.name.middle,
+                last: user.name.last,
+            },
+            phone: user.phone,
+            image: { imageUrl: user.image?.imageUrl, alt: user.image?.alt },
+            address: {
+                state: user.address.state,
+                country: user.address.country,
+                city: user.address.city,
+                street: user.address.street,
+                houseNumber: user.address.houseNumber,
+                zip: user.address.zip,
+            },
+            email: "",
+            password: "",
+            isBusiness: false
+        },
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 		validationSchema: yup.object({
 			name: yup.object({
 				first: yup.string().required().min(2).max(256),
@@ -92,7 +140,11 @@ const EditUser: FunctionComponent<EditUserProps> = () => {
 		onSubmit: (values: User) => {
 			putUserData(user._id as string, values).then(() => {
 				setUser((prevUser) =>
+<<<<<<< HEAD
 					prevUser._id === user._id ? { ...prevUser, ...values } : prevUser,
+=======
+					prevUser._id === user._id ? {...prevUser, ...values} : prevUser,
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 				);
 				successMsg(`${user.name.first} has ben Updated successfully`);
 			});
@@ -137,7 +189,11 @@ const EditUser: FunctionComponent<EditUserProps> = () => {
 	if (isLoading) return <Loading />;
 
 	return (
+<<<<<<< HEAD
 		<main style={{ backgroundColor: theme.background, color: theme.color, minHeight: "100vh" }}>
+=======
+		<main style={{ backgroundColor: theme.background, color: theme.color, minHeight: "100vh"}}>
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 			<Button onClick={() => navigate("sand-box")}>Back</Button>
 			<div className='container'>
 				<div className='row mp-5 fw-bold lead'>
@@ -151,7 +207,11 @@ const EditUser: FunctionComponent<EditUserProps> = () => {
 							src={user.image?.imageUrl}
 							alt={user.image?.alt}
 							className=' img-fluid rounded-5 my-4'
+<<<<<<< HEAD
 							style={{ maxWidth: "20rem" }}
+=======
+							style={{maxWidth: "20rem"}}
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 						/>
 					</div>
 					<div className='col-12'>
@@ -380,11 +440,19 @@ const EditUser: FunctionComponent<EditUserProps> = () => {
 				</form>
 			</div>
 			<DeleteModal
+<<<<<<< HEAD
 				show={showDeleteModal}
 				onHide={() => onHideDeleteCardModal()}
 				onDelete={() => {
 					handleDelete(cardToDelete as string);
 				}} refresh={() => { }} productId={""} />
+=======
+                show={showDeleteModal}
+                onHide={() => onHideDeleteCardModal()}
+                onDelete={() => {
+                    handleDelete(cardToDelete as string);
+				}} refresh={() => {}} productId={""}			/>
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 		</main>
 	);
 };

@@ -14,6 +14,7 @@ import { Pagination } from "react-bootstrap";
 
 
 interface SandBoxProps {
+<<<<<<< HEAD
 
 }
 
@@ -38,6 +39,32 @@ const SandBox: FunctionComponent<SandBoxProps> = () => {
 	const startIndex = (currentPage - 1) * usersPerPage;
 
 	const usersToDisplay = useMemo(() => {
+=======
+    
+}
+
+const SandBox: FunctionComponent<SandBoxProps> = () => {
+    const theme = useContext(ThemeContext);
+    const navigate = useNavigate();
+    const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [userSearch, setUserSearch] = useState<User[] | null>(null);
+    const {isAdmin} = useUserContext();
+    const [selectedUserId, setSelectedUserId] = useState<string>("");
+    const onHide = () => setShowDeleteModal(false);
+	const onShow = () => setShowDeleteModal(true);
+    const [render, setRender] = useState<boolean>(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [isLoading, setISLoading] = useState(true);
+    const [users, setUsers] = useState<User[]>([]);
+    const {decodedToken} = useToken();
+    const [searchTerm, setSearchTerm] = useState("");
+    const usersPerPage = 50;
+
+    const startIndex = (currentPage -1) * usersPerPage;
+
+    const usersToDisplay = useMemo(() => {
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 		if (userSearch) {
 			return userSearch;
 		}
@@ -48,6 +75,7 @@ const SandBox: FunctionComponent<SandBoxProps> = () => {
 		return usersToDisplay.slice(startIndex, startIndex + usersPerPage);
 	}, [usersToDisplay, startIndex]);
 
+<<<<<<< HEAD
 	useEffect(() => {
 		if (isAdmin === true) {
 			getAllUsers()
@@ -69,6 +97,29 @@ const SandBox: FunctionComponent<SandBoxProps> = () => {
 	}, []);
 
 	const handleDelete = (userId: string) => {
+=======
+    useEffect(()=>{
+        if (isAdmin === true){
+            getAllUsers()
+            .then((res)=>{
+                setUsers(res);
+                setISLoading(false);
+            })
+            .catch((err)=>{
+                errorMsg("Error fetching users");
+                setISLoading(false)
+            })
+        } else return;
+    },[render,isAdmin]);
+
+    const refresh = ()=> setRender(render)
+
+    const handleEdit = useCallback((userId: string) => {
+		if (selectedUserId || !selectedUserId) setSelectedUserId(userId);
+	}, []);
+
+    const handleDelete = (userId: string) => {
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 		try {
 			deleteUserById(userId)
 				.then(() => {
@@ -87,7 +138,11 @@ const SandBox: FunctionComponent<SandBoxProps> = () => {
 		}
 	};
 
+<<<<<<< HEAD
 	const handleSearch = useCallback((name: string) => {
+=======
+    const handleSearch = useCallback((name: string) => {
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 		setSearchTerm(name);
 		setCurrentPage(1);
 	}, []);
@@ -108,11 +163,19 @@ const SandBox: FunctionComponent<SandBoxProps> = () => {
 		});
 	}, [searchTerm]);
 
+<<<<<<< HEAD
 	if (isLoading) return <Loading />;
 
 	return (
 		<main style={{ backgroundColor: theme.background, color: theme.color, minHeight: "100vh" }}>
 			<div className='d-flex justify-content-around'>
+=======
+    if (isLoading) return <Loading />;
+
+    return (
+	<main style={{ backgroundColor: theme.background, color: theme.color, minHeight: "100vh"}}>
+		<div className='d-flex justify-content-around'>
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 				<h2 className='lead display-5'>SandBox</h2>
 				<div className='mt-3 mb-3'>
 					<form className='d-flex me-3' onSubmit={(e) => e.preventDefault()}>
@@ -138,7 +201,11 @@ const SandBox: FunctionComponent<SandBoxProps> = () => {
 			{/* Displaying the user result or all users */}
 			{userSearch && userSearch.length > 0 ? (
 				<div
+<<<<<<< HEAD
 					style={{ backgroundColor: theme.background, color: theme.color }}
+=======
+					style={{backgroundColor: theme.background, color: theme.color}}
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 					className='user-found card my-3 min-vh-100'
 				>
 					<h3>Users Found</h3>
@@ -182,14 +249,25 @@ const SandBox: FunctionComponent<SandBoxProps> = () => {
 													handleEdit(user._id as string)
 												}
 											>
+<<<<<<< HEAD
 												<FaPenFancy />
+=======
+												<FaPenFancy/>
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 											</button>
 										</Link>
 										<DeleteUserModal
 											render={() => refresh()}
 											show={showDeleteModal}
 											onHide={onHide}
+<<<<<<< HEAD
 											onDelete={() => handleDelete(user._id as string)} />
+=======
+											onDelete={() =>
+												handleDelete(user._id as string)
+											}
+										/>
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 										<button className='text-danger' onClick={onShow}>
 											<FaTrashAlt />
 										</button>
@@ -202,7 +280,11 @@ const SandBox: FunctionComponent<SandBoxProps> = () => {
 			) : (
 				<div className='table-responsive'>
 					<table
+<<<<<<< HEAD
 						style={{ backgroundColor: theme.background, color: theme.color }}
+=======
+						style={{backgroundColor: theme.background, color: theme.color}}
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 						className='table table-striped'
 					>
 						<thead>
@@ -239,7 +321,11 @@ const SandBox: FunctionComponent<SandBoxProps> = () => {
 											<td colSpan={1}>
 												<Link to={`/userDetails/${user._id}`}>
 													<button className='text-warning '>
+<<<<<<< HEAD
 														<FaPenFancy />
+=======
+														<FaPenFancy/>
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 													</button>
 												</Link>
 											</td>
@@ -248,7 +334,14 @@ const SandBox: FunctionComponent<SandBoxProps> = () => {
 													render={() => refresh()}
 													show={showDeleteModal}
 													onHide={onHide}
+<<<<<<< HEAD
 													onDelete={() => handleDelete(user._id as string)} />
+=======
+													onDelete={() =>
+														handleDelete(user._id as string)
+													}
+												/>
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 												<button
 													className='text-danger '
 													onClick={onShow}
@@ -286,7 +379,11 @@ const SandBox: FunctionComponent<SandBoxProps> = () => {
 					</div>
 				</div>
 			)}
+<<<<<<< HEAD
 		</main>);
+=======
+    </main> );
+>>>>>>> 25ab92bfa90e1d50fda1c4a26e8d13b63fd5af50
 }
 
 export default SandBox;

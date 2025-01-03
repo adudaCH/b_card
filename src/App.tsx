@@ -46,12 +46,10 @@ function App() {
                         <Route path="/register" element={<Register />} />
                         <Route path="/" element={<Cards />} />
                         <Route path="/like-button" element={<LikeButton cardId={""} userId={""} />} />
-                        {/* <Route path="/profile" element={<Profile />} /> */}
+                        <Route path="/profile" element={<Profile />} />
                         <Route path="/card-details/:cardId" element={<CardDetails />} />
-                        {/* TODO: fix the component below */}
                         <Route path="/fav-cards" element={<FavCards />} />
                         <Route path="/my-cards" element={<MyCards />} />
-                        <Route path="/sandbox" element={<SandBox />} />
                         <Route path="*" element={<PageNotFound />} />
                     </Routes>
                 </Router>
